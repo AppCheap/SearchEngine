@@ -72,4 +72,18 @@ class SearchQuery {
     public function getPage(): int {
         return $this->page;
     }
+
+    /**
+     * Convert the search query to an array.
+     *
+     * @return array The search query as an array.
+     */
+    public function toArray(): array {
+        return [
+            'query' => $this->query,
+            'filters' => $this->filters,
+            'limit' => $this->limit,
+            'page' => $this->page,
+        ];
+    }
 }
