@@ -3,20 +3,14 @@ namespace Appcheap\SearchEngine\Service\Engine\Models;
 
 class Schema {
     /**
-     * @var array $fields The fields of the schema
+     * @var Field[] $fields The fields of the schema
      */
     private $fields;
 
     /**
      * Schema constructor.
      *
-     * @param array $fields The fields of the schema
-     * 
-     * @example
-     * $fields = [
-     *    ['name' => 'title', 'type' => 'string', 'facet' => true, 'index' => true],
-     *    ['name' => 'content', 'type' => 'string'],
-     * ];
+     * @param Field[] $fields The fields of the schema
      */
     public function __construct(array $fields) {
         $this->fields = $fields;
@@ -25,7 +19,7 @@ class Schema {
     /**
      * Get the fields of the schema.
      *
-     * @return array The fields of the schema
+     * @return Field[] The fields of the schema
      */
     public function getFields(): array {
         return $this->fields;
@@ -38,12 +32,31 @@ class Schema {
      */
     public function toAlgoliaSchema(): array {
         // Convert schema fields to Algolia's format if needed
-        return $this->fields; // Adjust as needed
+        $algoliaFields = [];
+        foreach ($this->fields as $field) {
+            $algoliaFields[] = [
+                'name' => $field->getName(),
+                'type' => $field->getType(),
+                'facet' => $field->isFacet(),
+                'optional' => $field->isOptional(),
+                'index' => $field->isIndex(),
+                'store' => $field->isStore(),
+                'sort' => $field->isSort(),
+                'infix' => $field->isInfix(),
+                'locale' => $field->getLocale(),
+                'num_dim' => $field->getNumDim(),
+                'vec_dist' => $field->getVecDist(),
+                'reference' => $field->getReference(),
+                'range_index' => $field->isRangeIndex(),
+                'stem' => $field->isStem(),
+            ];
+        }
+        return $algoliaFields;
     }
 
     /**
      * Convert the schema fields to Typesense's format.
-     *
+     * 
      * @return array The schema fields in Typesense's format
      */
     public function toTypesenseSchema(): array {
@@ -51,10 +64,76 @@ class Schema {
         $typesenseFields = [];
         foreach ($this->fields as $field) {
             $typesenseFields[] = [
-                'name' => $field['name'],
-                'type' => $field['type']
+                'name' => $field->getName(),
+                'type' => $field->getType(),
+                'facet' => $field->isFacet(),
+                'optional' => $field->isOptional(),
+                'index' => $field->isIndex(),
+                'store' => $field->isStore(),
+                'sort' => $field->isSort(),
+                'infix' => $field->isInfix(),
+                'locale' => $field->getLocale(),
+                'num_dim' => $field->getNumDim(),
+                'vec_dist' => $field->getVecDist(),
+                'reference' => $field->getReference(),
+                'range_index' => $field->isRangeIndex(),
+                'stem' => $field->isStem(),
             ];
         }
         return $typesenseFields;
+    }
+
+    /**
+     * Convert the schema fields to Elasticsearch's format.
+     * 
+     * @return array The schema fields in Elasticsearch's format
+     */
+    public function toElasticsearchSchema(): array {
+        // Convert schema fields to Elasticsearch's format
+        $elasticsearchFields = [];
+        foreach ($this->fields as $field) {
+            $elasticsearchFields[$field->getName()] = [
+                'type' => $field->getType(),
+                'index' => $field->isIndex(),
+                'store' => $field->isStore(),
+                'sort' => $field->isSort(),
+                'infix' => $field->isInfix(),
+                'locale' => $field->getLocale(),
+                'num_dim' => $field->getNumDim(),
+                'vec_dist' => $field->getVecDist(),
+                'reference' => $field->getReference(),
+                'range_index' => $field->isRangeIndex(),
+                'stem' => $field->isStem(),
+            ];
+        }
+        return $elasticsearchFields;
+    }
+
+    /**
+     * Convert the schema fields to MeiliSearch's format.
+     * 
+     * @return array The schema fields in MeiliSearch's format
+     */
+    public function toMeiliSearchSchema(): array {
+        // Convert schema fields to MeiliSearch's format
+        $meilisearchFields = [];
+        foreach ($this->fields as $field) {
+            $meilisearchFields[$field->getName()] = [
+                'type' => $field->getType(),
+                'facet' => $field->isFacet(),
+                'optional' => $field->isOptional(),
+                'index' => $field->isIndex(),
+                'store' => $field->isStore(),
+                'sort' => $field->isSort(),
+                'infix' => $field->isInfix(),
+                'locale' => $field->getLocale(),
+                'num_dim' => $field->getNumDim(),
+                'vec_dist' => $field->getVecDist(),
+                'reference' => $field->getReference(),
+                'range_index' => $field->isRangeIndex(),
+                'stem' => $field->isStem(),
+            ];
+        }
+        return $meilisearchFields;
     }
 }
