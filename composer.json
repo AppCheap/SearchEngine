@@ -1,0 +1,22 @@
+{
+    "name": "appcheap/search-engine",
+    "description": "Data indexing and for search engine",
+    "type": "library",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Appcheap\\SearchEngine\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dangtienngoc",
+            "email": "dangtienngoc@hotmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "scripts": {
+        "lint": "phpcs --standard=PSR12 src"
+    }
+}

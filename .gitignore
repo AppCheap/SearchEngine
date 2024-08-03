@@ -1,0 +1,50 @@
+# Composer dependencies
+/vendor/
+
+# Composer itself
+composer.phar
+
+# PHPStorm project files
+.idea/
+
+# VS Code project files
+.vscode/
+
+# Laravel specific
+/storage/
+/bootstrap/cache/
+
+# Symfony specific
+/var/
+/vendor/
+/.env
+
+# Logs and temp files
+*.log
+*.cache
+*.tmp
+
+# PHPUnit
+.phpunit.result.cache
+
+# Ignore node_modules if using Node.js
+/node_modules/
+
+# Ignore build artifacts
+/build/
+/dist/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files
+*.iml
+*.ipr
+*.iws
+
+# Ignore environment-specific files
+.env
+.env.local
+.env.*.local
+.phpunit.result.cache
