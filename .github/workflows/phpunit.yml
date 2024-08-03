@@ -19,10 +19,13 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.0' # Specify the PHP version you need
+        php-version: '8.3.7' # Specify the PHP version you need
         extensions: mbstring, intl, dom
         ini-values: post_max_size=256M, upload_max_filesize=256M
         coverage: none
+
+    - name: Update Composer dependencies
+      run: composer update --prefer-dist --no-progress
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
