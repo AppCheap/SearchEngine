@@ -34,4 +34,16 @@ class MemoryProxy
         }
         return call_user_func_array([$this->instance, $name], $arguments);
     }
+
+    /**
+     * Get the actual instance.
+     * 
+     * @return mixed The actual instance.
+     */
+    public function getInstance() {
+        if ($this->instance === null) {
+            $this->instance = ($this->initializer)();
+        }
+        return $this->instance;
+    }
 }
