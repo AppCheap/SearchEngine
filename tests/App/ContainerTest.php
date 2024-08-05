@@ -73,4 +73,14 @@ class ContainerTest extends TestCase {
         $this->assertTrue($container->has('bar'));
         $this->assertFalse($container->has('non_bar'));
     }
+
+    public function testCanRegisterAndResolveServiceWithString() {
+        $container = new Container();
+
+        $container->set('baz', 'qux');
+
+        $resolved = $container->get('baz');
+
+        $this->assertEquals('qux', $resolved);
+    }
 }
