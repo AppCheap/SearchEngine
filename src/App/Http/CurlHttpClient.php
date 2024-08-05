@@ -9,6 +9,26 @@ namespace Appcheap\SearchEngine\App\Http;
  */
 class CurlHttpClient implements HttpClientInterface
 {
+    private $curlInit;
+    private $curlSetopt;
+    private $curlExec;
+    private $curlError;
+    private $curlClose;
+
+    public function __construct(
+        callable $curlInit = null,
+        callable $curlSetopt = null,
+        callable $curlExec = null,
+        callable $curlError = null,
+        callable $curlClose = null
+    ) {
+        $this->curlInit = $curlInit ?: 'curl_init';
+        $this->curlSetopt = $curlSetopt ?: 'curl_setopt';
+        $this->curlExec = $curlExec ?: 'curl_exec';
+        $this->curlError = $curlError ?: 'curl_error';
+        $this->curlClose = $curlClose ?: 'curl_close';
+    }
+
     /**
      * Send an HTTP request using cURL.
      *
@@ -21,7 +41,7 @@ class CurlHttpClient implements HttpClientInterface
      */
     private function sendRequest(string $method, string $url, array $data = [], array $headers = [])
     {
-        $ch = curl_init();
+        $ch = call_user_func($this->curlInit);
 
         switch (strtoupper($method)) {
             case 'GET':
@@ -30,26 +50,26 @@ class CurlHttpClient implements HttpClientInterface
                 }
                 break;
             case 'POST':
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                call_user_func($this->curlSetopt, $ch, CURLOPT_POST, true);
+                call_user_func($this->curlSetopt, $ch, CURLOPT_POSTFIELDS, json_encode($data));
                 break;
             case 'PUT':
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                call_user_func($this->curlSetopt, $ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                call_user_func($this->curlSetopt, $ch, CURLOPT_POSTFIELDS, json_encode($data));
                 break;
             case 'DELETE':
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+                call_user_func($this->curlSetopt, $ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                 break;
         }
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge(['Content-Type: application/json'], $headers));
+        call_user_func($this->curlSetopt, $ch, CURLOPT_URL, $url);
+        call_user_func($this->curlSetopt, $ch, CURLOPT_RETURNTRANSFER, true);
+        call_user_func($this->curlSetopt, $ch, CURLOPT_HTTPHEADER, array_merge(['Content-Type: application/json'], $headers));
 
-        $response = curl_exec($ch);
-        $error = curl_error($ch);
+        $response = call_user_func($this->curlExec, $ch);
+        $error = call_user_func($this->curlError, $ch);
 
-        curl_close($ch);
+        call_user_func($this->curlClose, $ch);
 
         if ($error) {
             throw new \Exception("Curl error: $error");
