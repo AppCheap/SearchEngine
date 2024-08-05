@@ -1,5 +1,5 @@
 <?php
-namespace Appcheap\SearchEngine\App\Service\Engine;
+namespace Appcheap\SearchEngine\Service\Engine;
 
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
@@ -22,26 +22,29 @@ interface SearchServiceInterface {
     /**
      * Index a document in the search service.
      *
+     * @param string $name The name of the collection to index the document in.
      * @param array $document The document to be indexed.
      * @return string The ID of the indexed document.
      */
-    public function indexDocument(array $document): string;
+    public function indexDocument(string $name, array $document): string;
 
     /**
      * Search for documents that match the given query.
      *
+     * @param string $name The name of the collection to search in.
      * @param SearchQuery $query The search query.
      * @return array An array of documents that match the query.
      */
-    public function search(SearchQuery $query): array;
+    public function search(string $name, SearchQuery $query): array;
 
     /**
      * Delete a document with the given ID from the search service.
      *
+     * @param string $name The name of the collection to delete the document from.
      * @param string $id The ID of the document to be deleted.
      * @return void
      */
-    public function deleteDocument(string $id): void;
+    public function deleteDocument(string $name, string $id): void;
 
     /**
      * Delete a collection with the given name from the search service.
@@ -54,19 +57,21 @@ interface SearchServiceInterface {
     /**
      * Get a document with the given ID from the search service.
      *
+     * @param string $name The name of the collection to retrieve the document from.
      * @param string $id The ID of the document to be retrieved.
      * @return array The retrieved document.
      */
-    public function getDocument(string $id): array;
+    public function getDocument(string $name, string $id): array;
 
     /**
      * Update a document with the given ID in the search service.
      *
+     * @param string $name The name of the collection to update the document in.
      * @param string $id The ID of the document to be updated.
      * @param array $document The updated document.
      * @return void
      */
-    public function updateDocument(string $id, array $document): void;
+    public function updateDocument(string $name, string $id, array $document): void;
 
     /**
      * Update the schema of a collection with the given name in the search service.

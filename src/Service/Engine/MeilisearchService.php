@@ -1,9 +1,9 @@
 <?php
-namespace Appcheap\SearchEngine\App\Service\Engine;
+namespace Appcheap\SearchEngine\Service\Engine;
 
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
-use Appcheap\SearchEngine\App\Service\Engine\SearchServiceInterface;
+use Appcheap\SearchEngine\Service\Engine\SearchServiceInterface;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
 
 class MeilisearchService implements SearchServiceInterface {
@@ -61,7 +61,7 @@ class MeilisearchService implements SearchServiceInterface {
      * @param array $document The document to index.
      * @return string The ID of the indexed document.
      */
-    public function indexDocument(array $document): string {
+    public function indexDocument(string $name, array $document): string {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents';
         $response = $this->httpClient->post($url, $document, [
             'Authorization: Bearer ' . $this->apiKey,
@@ -75,7 +75,7 @@ class MeilisearchService implements SearchServiceInterface {
      * @param SearchQuery $query The search query.
      * @return array The search results.
      */
-    public function search(SearchQuery $query): array {
+    public function search(string $name, SearchQuery $query): array {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/search';
         $response = $this->httpClient->post($url, $query->toArray(), [
             'Authorization: Bearer ' . $this->apiKey,
@@ -88,7 +88,7 @@ class MeilisearchService implements SearchServiceInterface {
      *
      * @param string $documentId The ID of the document to delete.
      */
-    public function deleteDocument(string $documentId): void {
+    public function deleteDocument(string $name, string $documentId): void {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents/' . $documentId;
         $this->httpClient->delete($url, [
             'Authorization: Bearer ' . $this->apiKey,
@@ -113,7 +113,7 @@ class MeilisearchService implements SearchServiceInterface {
      * @param string $documentId The ID of the document to retrieve.
      * @return array The retrieved document.
      */
-    public function getDocument(string $documentId): array {
+    public function getDocument(string $name, string $documentId): array {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents/' . $documentId;
         return $this->httpClient->get($url, [
             'Authorization: Bearer ' . $this->apiKey,
@@ -126,7 +126,7 @@ class MeilisearchService implements SearchServiceInterface {
      * @param string $documentId The ID of the document to update.
      * @param array $document The updated document.
      */
-    public function updateDocument(string $documentId, array $document): void {
+    public function updateDocument(string $name, string $documentId, array $document): void {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents/' . $documentId;
         $this->httpClient->put($url, $document, [
             'Authorization: Bearer ' . $this->apiKey,

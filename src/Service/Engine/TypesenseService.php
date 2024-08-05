@@ -1,10 +1,11 @@
 <?php
-namespace Appcheap\SearchEngine\App\Service\Engine;
+namespace Appcheap\SearchEngine\Service\Engine;
 
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
-use Appcheap\SearchEngine\App\Service\Engine\SearchServiceInterface;
+use Appcheap\SearchEngine\Service\Engine\SearchServiceInterface;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
+use Appcheap\SearchEngine\App\Config\TypesenseConfig;
 
 class TypesenseService implements SearchServiceInterface {
     /**
@@ -13,33 +14,19 @@ class TypesenseService implements SearchServiceInterface {
     private $httpClient;
 
     /**
-     * @var string The collection name.
+     * @var TypesenseConfig The Typesense configuration.
      */
-    private $collectionName;
-
-    /**
-     * @var string The Typesense base URL.
-     */
-    private $baseUrl;
-
-    /**
-     * @var string The Typesense API key.
-     */
-    private $apiKey;
-
+    private $config;
+    
     /**
      * TypesenseService constructor.
      *
      * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param string $collectionName The name of the collection.
-     * @param string $baseUrl The Typesense base URL.
-     * @param string $apiKey The Typesense API key.
+     * @param TypesenseConfig $config The Typesense configuration.
      */
-    public function __construct(HttpClientInterface $httpClient, string $collectionName, string $baseUrl, string $apiKey) {
-        $this->collectionName = $collectionName;        
+    public function __construct(HttpClientInterface $httpClient, TypesenseConfig $config) {     
         $this->httpClient = $httpClient;
-        $this->baseUrl = $baseUrl;
-        $this->apiKey = $apiKey;
+        $this->config = $config;
     }
 
     /**
@@ -49,23 +36,23 @@ class TypesenseService implements SearchServiceInterface {
      * @param Schema $schema The schema of the collection.
      */
     public function createCollection(string $name, Schema $schema): void {
-        $url = $this->baseUrl . '/collections';
+        $url = $this->config->getUrl() . '/collections';
         $this->httpClient->post($url, $schema->toTypesenseSchema($name), [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
     }
 
     /**
      * Index a document in Typesense.
      *
-     * @param string $collectionName The name of the collection.
+     * @param string $name The name of the collection.
      * @param array $document The document to index.
      * @return string The ID of the indexed document.
      */
-    public function indexDocument(array $document): string {
-        $url = $this->baseUrl . '/collections/' . $this->collectionName . '/documents';
+    public function indexDocument(string $name, array $document): string {
+        $url = $this->config->getUrl() . '/collections/' . $name . '/documents';
         $response = $this->httpClient->post($url, $document, [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
         return $response['id'];
     }
@@ -73,14 +60,14 @@ class TypesenseService implements SearchServiceInterface {
     /**
      * Search for documents in Typesense.
      *
-     * @param string $collectionName The name of the collection.
+     * @param string $name The name of the collection.
      * @param SearchQuery $query The search query.
      * @return array The search results.
      */
-    public function search(SearchQuery $query): array {
-        $url = $this->baseUrl . '/collections/' . $this->collectionName . '/documents/search';
+    public function search(string $name, SearchQuery $query): array {
+        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/search';
         $response = $this->httpClient->get($url, $query->toArray(), [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
         return $response['hits'];
     }
@@ -91,10 +78,10 @@ class TypesenseService implements SearchServiceInterface {
      * @param string $collectionName The name of the collection.
      * @param string $documentId The ID of the document to delete.
      */
-    public function deleteDocument(string $documentId): void {
-        $url = $this->baseUrl . '/collections/' . $this->collectionName . '/documents/' . $documentId;
+    public function deleteDocument(string $name, string $documentId): void {
+        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         $this->httpClient->delete($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
     }
 
@@ -104,9 +91,9 @@ class TypesenseService implements SearchServiceInterface {
      * @param string $name The name of the collection to delete.
      */
     public function deleteCollection(string $name): void {
-        $url = $this->baseUrl . '/collections/' . $name;
+        $url = $this->config->getUrl() . '/collections/' . $name;
         $this->httpClient->delete($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
     }
 
@@ -116,23 +103,24 @@ class TypesenseService implements SearchServiceInterface {
      * @param string $documentId The ID of the document to retrieve.
      * @return array The retrieved document.
      */
-    public function getDocument(string $documentId): array {
-        $url = $this->baseUrl . '/collections/' . $this->collectionName . '/documents/' . $documentId;
+    public function getDocument(string $name, string $documentId): array {
+        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         return $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
     }
 
     /**
      * Update a document in Typesense.
      *
+     * @param string $name The name of the collection.
      * @param string $documentId The ID of the document to update.
      * @param array $document The updated document.
      */
-    public function updateDocument(string $documentId, array $document): void {
-        $url = $this->baseUrl . '/collections/' . $this->collectionName . '/documents/' . $documentId;
+    public function updateDocument(string $name, string $documentId, array $document): void {
+        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         $this->httpClient->put($url, $document, [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
     }
 
@@ -143,9 +131,9 @@ class TypesenseService implements SearchServiceInterface {
      * @param Schema $schema The updated schema.
      */
     public function updateSchema(string $name, Schema $schema): void {
-        $url = $this->baseUrl . '/collections/' . $name;
+        $url = $this->config->getUrl() . '/collections/' . $name;
         $this->httpClient->put($url, $schema->toTypesenseSchema($name), [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
     }
 
@@ -156,9 +144,9 @@ class TypesenseService implements SearchServiceInterface {
      * @return array The schema of the collection.
      */
     public function getSchema(string $name): array {
-        $url = $this->baseUrl . '/collections/' . $name;
+        $url = $this->config->getUrl() . '/collections/' . $name;
         $response = $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
         return $response['fields'];
     }
@@ -170,9 +158,9 @@ class TypesenseService implements SearchServiceInterface {
      * @return array The collection.
      */
     public function getCollection(string $name): array {
-        $url = $this->baseUrl . '/collections/' . $name;
+        $url = $this->config->getUrl() . '/collections/' . $name;
         return $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->apiKey,
+            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
         ]);
     }
 }

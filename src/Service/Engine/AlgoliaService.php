@@ -1,10 +1,10 @@
 <?php
 
-namespace Appcheap\SearchEngine\App\Service\Engine;
+namespace Appcheap\SearchEngine\Service\Engine;
 
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
-use Appcheap\SearchEngine\App\Service\Engine\SearchServiceInterface;
+use Appcheap\SearchEngine\Service\Engine\SearchServiceInterface;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
 
 class AlgoliaService implements SearchServiceInterface {
@@ -69,7 +69,7 @@ class AlgoliaService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function indexDocument(array $document): string {
+    public function indexDocument(string $name, array $document): string {
         // Send a POST request to the Algolia API to index a document.
         $response = $this->httpClient->post(sprintf("%s/indexes/documents", $this->baseUrl), $document, $this->getHeaders());
         return $response['objectID'];
@@ -78,7 +78,7 @@ class AlgoliaService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function search(SearchQuery $query): array {
+    public function search(string $name, SearchQuery $query): array {
         // Send a POST request to the Algolia API to search for documents.
         return $this->httpClient->post(sprintf("%s/indexes/documents/search", $this->baseUrl), $query->toArray(), $this->getHeaders());
     }
@@ -86,7 +86,7 @@ class AlgoliaService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function deleteDocument(string $id): void {
+    public function deleteDocument(string $name, string $id): void {
         // Send a DELETE request to the Algolia API to delete a document.
         $this->httpClient->delete(sprintf("%s/indexes/documents/%s", $this->baseUrl, $id), [], $this->getHeaders());
     }
@@ -102,7 +102,7 @@ class AlgoliaService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function getDocument(string $id): array {
+    public function getDocument(string $name, string $id): array {
         // Send a GET request to the Algolia API to get a document.
         return $this->httpClient->get(sprintf("%s/indexes/documents/%s", $this->baseUrl, $id), $this->getHeaders());
     }
@@ -110,7 +110,7 @@ class AlgoliaService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function updateDocument(string $id, array $document): void {
+    public function updateDocument(string $name, string $id, array $document): void {
         // Send a PUT request to the Algolia API to update a document.
         $this->httpClient->put(sprintf("%s/indexes/documents/%s", $this->baseUrl, $id), $document, $this->getHeaders());
     }
