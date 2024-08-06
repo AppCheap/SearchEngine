@@ -2,6 +2,9 @@
 
 namespace Appcheap\SearchEngine\App\Http;
 
+use Appcheap\SearchEngine\App\Exception\HttpClientErrorFactory;
+use Appcheap\SearchEngine\App\Exception\HttpClientError;
+
 /**
  * Class WpHttpClient
  *
@@ -16,7 +19,7 @@ class WpHttpClient implements HttpClientInterface
      * @param string $url The URL to send the request to.
      * @param array $options The options to send with the request.
      * @return mixed The response from the server.
-     * @throws \Exception If there is an error.
+     * @throws HttpClientError If there is an HTTP error.
      */
     private function sendRequest(string $method, string $url, array $options = [])
     {
@@ -29,7 +32,14 @@ class WpHttpClient implements HttpClientInterface
         $response = wp_remote_request($url, $args);
 
         if (is_wp_error($response)) {
-            throw new \Exception("WordPress HTTP error: " . $response->get_error_message());
+            throw HttpClientErrorFactory::createException($response->get_error_code(), $response->get_error_message());
+        }
+
+        $statusCode = wp_remote_retrieve_response_code($response);
+
+        if ($statusCode >= 400) {
+            $message = wp_remote_retrieve_response_message($response);
+            throw HttpClientErrorFactory::createException($statusCode, $message);
         }
 
         return json_decode(wp_remote_retrieve_body($response), true);

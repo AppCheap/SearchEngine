@@ -13,11 +13,12 @@ interface SearchServiceInterface {
     /**
      * Create a new collection with the given name and schema.
      *
-     * @param string $name The name of the collection.
      * @param Schema $schema The schema of the collection.
-     * @return void
+     * 
+     * @return array The response from the server.
+     * @throws HttpClientError If there is an HTTP error.
      */
-    public function createCollection(string $name, Schema $schema): void;
+    public function createCollection(Schema $schema): array;
 
     /**
      * Index a document in the search service.

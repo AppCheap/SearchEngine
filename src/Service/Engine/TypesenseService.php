@@ -32,13 +32,15 @@ class TypesenseService implements SearchServiceInterface {
     /**
      * Create a collection in Typesense.
      *
-     * @param string $name The name of the collection.
      * @param Schema $schema The schema of the collection.
+     * 
+     * @return array The response from the server.
+     * @throws HttpClientError If there is an HTTP error.
      */
-    public function createCollection(string $name, Schema $schema): void {
+    public function createCollection(Schema $schema): array {
         $url = $this->config->getUrl() . '/collections';
-        $this->httpClient->post($url, $schema->toTypesenseSchema($name), [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+        return $this->httpClient->post($url, $schema->toTypesenseSchema(), [
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
     }
 
@@ -52,7 +54,7 @@ class TypesenseService implements SearchServiceInterface {
     public function indexDocument(string $name, array $document): string {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents';
         $response = $this->httpClient->post($url, $document, [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
         return $response['id'];
     }
@@ -66,10 +68,13 @@ class TypesenseService implements SearchServiceInterface {
      */
     public function search(string $name, SearchQuery $query): array {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/search';
-        $response = $this->httpClient->get($url, $query->toArray(), [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+        $queryString = http_build_query($query->toArray());
+        $url .= '?' . $queryString;
+
+        $response = $this->httpClient->get($url, [
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
-        return $response['hits'];
+        return $response;
     }
 
     /**
@@ -81,7 +86,7 @@ class TypesenseService implements SearchServiceInterface {
     public function deleteDocument(string $name, string $documentId): void {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         $this->httpClient->delete($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
     }
 
@@ -93,7 +98,7 @@ class TypesenseService implements SearchServiceInterface {
     public function deleteCollection(string $name): void {
         $url = $this->config->getUrl() . '/collections/' . $name;
         $this->httpClient->delete($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
     }
 
@@ -106,7 +111,7 @@ class TypesenseService implements SearchServiceInterface {
     public function getDocument(string $name, string $documentId): array {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         return $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
     }
 
@@ -120,7 +125,7 @@ class TypesenseService implements SearchServiceInterface {
     public function updateDocument(string $name, string $documentId, array $document): void {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         $this->httpClient->put($url, $document, [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
     }
 
@@ -133,7 +138,7 @@ class TypesenseService implements SearchServiceInterface {
     public function updateSchema(string $name, Schema $schema): void {
         $url = $this->config->getUrl() . '/collections/' . $name;
         $this->httpClient->put($url, $schema->toTypesenseSchema($name), [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
     }
 
@@ -146,7 +151,7 @@ class TypesenseService implements SearchServiceInterface {
     public function getSchema(string $name): array {
         $url = $this->config->getUrl() . '/collections/' . $name;
         $response = $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
         return $response['fields'];
     }
@@ -160,7 +165,7 @@ class TypesenseService implements SearchServiceInterface {
     public function getCollection(string $name): array {
         $url = $this->config->getUrl() . '/collections/' . $name;
         return $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY: ' . $this->config->getApiKey(),
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
     }
 }

@@ -2,88 +2,36 @@
 namespace Appcheap\SearchEngine\Service\Engine\Models;
 
 class SearchQuery {
-    /**
-     * @var string The search query string.
-     */
-    private $query;
-
-    /**
-     * @var array The filters to apply to the search query.
-     */
-    private $filters;
-
-    /**
-     * @var int The maximum number of results to return.
-     */
-    private $limit;
-
-    /**
-     * @var int The page number of the search results.
-     */
-    private $page;
-
-    /**
-     * SearchQuery constructor.
-     *
-     * @param string $query The search query string.
-     * @param array $filters The filters to apply to the search query.
-     * @param int $limit The maximum number of results to return.
-     * @param int $page The page number of the search results.
-     */
-    public function __construct(string $query, array $filters = [], int $limit = 10, int $page = 1) {
-        $this->query = $query;
-        $this->filters = $filters;
-        $this->limit = $limit;
-        $this->page = $page;
+    private $q;
+    private $query_by;
+    // ... other parameters
+  
+    public function __construct(string $q, string $query_by) {
+      $this->q = $q;
+      $this->query_by = $query_by;
+      // ... other defaults
     }
-
-    /**
-     * Get the search query string.
-     *
-     * @return string The search query string.
-     */
-    public function getQuery(): string {
-        return $this->query;
+  
+    // Getters
+    public function getQ(): string {
+      return $this->q;
     }
-
-    /**
-     * Get the filters to apply to the search query.
-     *
-     * @return array The filters to apply to the search query.
-     */
-    public function getFilters(): array {
-        return $this->filters;
+  
+    public function getQueryBy(): string {
+      return $this->query_by;
     }
-
-    /**
-     * Get the maximum number of results to return.
-     *
-     * @return int The maximum number of results to return.
-     */
-    public function getLimit(): int {
-        return $this->limit;
-    }
-
-    /**
-     * Get the page number of the search results.
-     *
-     * @return int The page number of the search results.
-     */
-    public function getPage(): int {
-        return $this->page;
-    }
-
-    /**
-     * Convert the search query to an array.
-     *
-     * @return array The search query as an array.
-     */
+  
+    // ... getters for other parameters
+  
+    // Setters (with fluent interface for optional parameters)
+  
+    // ... setters for other parameters
+  
     public function toArray(): array {
-        return [
-            'query' => $this->query,
-            'filters' => $this->filters,
-            'limit' => $this->limit,
-            'page' => $this->page,
-        ];
+      $params = [
+        'q' => $this->q,
+        'query_by' => $this->query_by,
+      ];  
+      return $params;
     }
-}
+  }

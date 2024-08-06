@@ -10,7 +10,7 @@ class Field
     private $name;
 
     /**
-     * @var Type The type of the field.
+     * @var string The type of the field.
      */
     private $type;
 
@@ -78,7 +78,7 @@ class Field
      * Field constructor.
      *
      * @param string $name The name of the field.
-     * @param Type $type The type of the field.
+     * @param string $type The type of the field.
      * @param bool $facet Enables faceting on the field. Default: false.
      * @param bool $optional When set to true, the field can have empty, null or missing values. Default: false.
      * @param bool $index When set to false, the field will not be indexed in any in-memory index. Default: true.
@@ -94,7 +94,7 @@ class Field
      */
     public function __construct(
         string $name,
-        Type $type,
+        string $type,
         bool $facet = false,
         bool $optional = false,
         bool $index = true,
@@ -137,9 +137,9 @@ class Field
     /**
      * Get the type of the field.
      *
-     * @return Type
+     * @return string
      */
-    public function getType(): Type
+    public function getType(): string
     {
         return $this->type;
     }
@@ -204,5 +204,79 @@ class Field
     public function isStem(): bool
     {
         return $this->stem;
+    }
+
+    // Setters
+
+    public function setFacet(bool $facet): self
+    {
+        $this->facet = $facet;
+        return $this;
+    }
+
+    public function setOptional(bool $optional): self
+    {
+        $this->optional = $optional;
+        return $this;
+    }
+
+    public function setIndex(bool $index): self
+    {
+        $this->index = $index;
+        return $this;
+    }
+
+    public function setStore(bool $store): self
+    {
+        $this->store = $store;
+        return $this;
+    }
+
+    public function setSort(bool $sort): self
+    {
+        $this->sort = $sort;
+        return $this;
+    }
+
+    public function setInfix(bool $infix): self
+    {
+        $this->infix = $infix;
+        return $this;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    public function setNumDim(int $num_dim): self
+    {
+        $this->num_dim = $num_dim;
+        return $this;
+    }
+
+    public function setVecDist(string $vec_dist): self
+    {
+        $this->vec_dist = $vec_dist;
+        return $this;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
+        return $this;
+    }
+
+    public function setRangeIndex(bool $range_index): self
+    {
+        $this->range_index = $range_index;
+        return $this;
+    }
+
+    public function setStem(bool $stem): self
+    {
+        $this->stem = $stem;
+        return $this;
     }
 }

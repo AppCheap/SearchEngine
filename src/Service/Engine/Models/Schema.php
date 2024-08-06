@@ -3,17 +3,51 @@ namespace Appcheap\SearchEngine\Service\Engine\Models;
 
 class Schema {
     /**
+     * @var string $name The name of the collection
+     */
+    private $name;
+
+    /**
      * @var Field[] $fields The fields of the schema
      */
     private $fields;
 
     /**
+     * @var string $defaultSortingField The default sorting field
+     */
+    private $defaultSortingField;
+
+    /**
      * Schema constructor.
      *
+     * @param string $name The name of the collection
      * @param Field[] $fields The fields of the schema
      */
-    public function __construct(array $fields) {
+    public function __construct(string $name, array $fields) {
+        $this->name = $name;
         $this->fields = $fields;
+    }
+
+    // Setters (with fluent interface for optional parameters)
+
+    /**
+     * Set the default sorting field.
+     *
+     * @param string $defaultSortingField The default sorting field
+     * @return Schema The schema object
+     */
+    public function setDefaultSortingField(string $defaultSortingField): Schema {
+        $this->defaultSortingField = $defaultSortingField;
+        return $this;
+    }
+
+    /**
+     * Get the name of the collection.
+     *
+     * @return string The name of the collection
+     */
+    public function getName(): string {
+        return $this->name;
     }
 
     /**
@@ -60,27 +94,75 @@ class Schema {
      * @return array The schema fields in Typesense's format
      */
     public function toTypesenseSchema(): array {
-        // Convert schema fields to Typesense's format
+        $schema = [
+            'name' => $this->name,
+        ];
+
         $typesenseFields = [];
         foreach ($this->fields as $field) {
-            $typesenseFields[] = [
+            $typesenseField = [
                 'name' => $field->getName(),
                 'type' => $field->getType(),
-                'facet' => $field->isFacet(),
-                'optional' => $field->isOptional(),
-                'index' => $field->isIndex(),
-                'store' => $field->isStore(),
-                'sort' => $field->isSort(),
-                'infix' => $field->isInfix(),
-                'locale' => $field->getLocale(),
-                'num_dim' => $field->getNumDim(),
-                'vec_dist' => $field->getVecDist(),
-                'reference' => $field->getReference(),
-                'range_index' => $field->isRangeIndex(),
-                'stem' => $field->isStem(),
             ];
+
+            if ($field->isFacet()) {
+                $typesenseField['facet'] = $field->isFacet();
+            }
+
+            if ($field->isOptional()) {
+                $typesenseField['optional'] = $field->isOptional();
+            }
+
+            if ($field->isIndex() && $field->isIndex() !== true) {
+                $typesenseField['index'] = $field->isIndex();
+            }
+
+            if ($field->isStore() && $field->isStore() !== true) {
+                $typesenseField['store'] = $field->isStore();
+            }
+
+            if ($field->isSort()) {
+                $typesenseField['sort'] = $field->isSort();
+            }
+
+            if ($field->isInfix()) {
+                $typesenseField['infix'] = $field->isInfix();
+            }
+
+            if ($field->getLocale() && $field->getLocale() !== 'en') {
+                $typesenseField['locale'] = $field->getLocale();
+            }
+
+            if ($field->getNumDim()) {
+                $typesenseField['num_dim'] = $field->getNumDim();
+            }
+
+            if ($field->getVecDist() && $field->getVecDist() !== 'cosine') {
+                $typesenseField['vec_dist'] = $field->getVecDist();
+            }
+
+            if ($field->getReference()) {
+                $typesenseField['reference'] = $field->getReference();
+            }
+
+            if ($field->isRangeIndex()) {
+                $typesenseField['range_index'] = $field->isRangeIndex();
+            }
+
+            if ($field->isStem()) {
+                $typesenseField['stem'] = $field->isStem();
+            }
+
+            $typesenseFields[] = $typesenseField;
         }
-        return $typesenseFields;
+
+        $schema['fields'] = $typesenseFields;
+
+        if ($this->defaultSortingField) {
+            $schema['default_sorting_field'] = $this->defaultSortingField;
+        }
+
+        return $schema;
     }
 
     /**
