@@ -7,7 +7,8 @@ namespace Appcheap\SearchEngine\App\Exception;
  */
 class BadRequestException extends HttpClientError
 {
-    public function __construct(string $errorMessage = "Bad Request - The request could not be understood due to malformed syntax.") {
+    public function __construct(string $errorMessage = "Bad Request - The request could not be understood due to malformed syntax.")
+    {
         parent::__construct(400, $errorMessage);
     }
 }

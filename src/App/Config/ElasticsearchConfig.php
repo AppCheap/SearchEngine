@@ -2,14 +2,17 @@
 
 namespace Appcheap\SearchEngine\App\Config;
 
-class ElasticsearchConfig {
+class ElasticsearchConfig
+{
     private $hosts;
 
-    public function __construct($hosts) {
+    public function __construct($hosts)
+    {
         $this->hosts = $hosts;
     }
 
-    public function getHosts() {
+    public function getHosts()
+    {
         return $this->hosts;
     }
 }

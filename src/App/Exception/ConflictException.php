@@ -7,8 +7,8 @@ namespace Appcheap\SearchEngine\App\Exception;
  */
 class ConflictException extends HttpClientError
 {
-    public function __construct(string $errorMessage = "Conflict - When a resource already exists.") {
+    public function __construct(string $errorMessage = "Conflict - When a resource already exists.")
+    {
         parent::__construct(409, $errorMessage);
     }
 }
-

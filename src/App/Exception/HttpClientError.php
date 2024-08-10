@@ -4,7 +4,8 @@ namespace Appcheap\SearchEngine\App\Exception;
 
 use Exception;
 
-class HttpClientError extends Exception {
+class HttpClientError extends Exception
+{
     /**
      * @var int The HTTP status code.
      */
@@ -21,7 +22,8 @@ class HttpClientError extends Exception {
      * @param int $statusCode The HTTP status code.
      * @param string $errorMessage The error message.
      */
-    public function __construct(int $statusCode, string $errorMessage) {
+    public function __construct(int $statusCode, string $errorMessage)
+    {
         $this->statusCode = $statusCode;
         $this->errorMessage = $errorMessage;
         parent::__construct($errorMessage, $statusCode);
@@ -32,7 +34,8 @@ class HttpClientError extends Exception {
      *
      * @return int The HTTP status code.
      */
-    public function getStatusCode(): int {
+    public function getStatusCode(): int
+    {
         return $this->statusCode;
     }
 
@@ -41,7 +44,8 @@ class HttpClientError extends Exception {
      *
      * @return string The error message.
      */
-    public function getErrorMessage(): string {
+    public function getErrorMessage(): string
+    {
         return $this->errorMessage;
     }
 }

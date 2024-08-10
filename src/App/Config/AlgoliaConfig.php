@@ -2,20 +2,24 @@
 
 namespace Appcheap\SearchEngine\App\Config;
 
-class AlgoliaConfig {
+class AlgoliaConfig
+{
     private $appId;
     private $apiKey;
 
-    public function __construct($appId, $apiKey) {
+    public function __construct($appId, $apiKey)
+    {
         $this->appId = $appId;
         $this->apiKey = $apiKey;
     }
 
-    public function getAppId() {
+    public function getAppId()
+    {
         return $this->appId;
     }
 
-    public function getApiKey() {
+    public function getApiKey()
+    {
         return $this->apiKey;
     }
 }

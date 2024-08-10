@@ -2,8 +2,10 @@
 
 namespace Appcheap\SearchEngine\App\Config;
 
-class SearchConfigFactory {
-    public static function create($serviceType, $config) {
+class SearchConfigFactory
+{
+    public static function create($serviceType, $config)
+    {
         switch ($serviceType) {
             case 'typesense':
                 return new TypesenseConfig($config['apiKey'], $config['nodes'], $config['connectionTimeoutSeconds'] ?? 2.0);

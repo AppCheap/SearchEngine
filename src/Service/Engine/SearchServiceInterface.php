@@ -1,4 +1,5 @@
 <?php
+
 namespace Appcheap\SearchEngine\Service\Engine;
 
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
@@ -6,15 +7,16 @@ use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
 
 /**
  * Interface SearchServiceInterface
- * 
+ *
  * This interface defines the methods that a search service must implement.
  */
-interface SearchServiceInterface {
+interface SearchServiceInterface
+{
     /**
      * Create a new collection with the given name and schema.
      *
      * @param Schema $schema The schema of the collection.
-     * 
+     *
      * @return array The response from the server.
      * @throws HttpClientError If there is an HTTP error.
      */

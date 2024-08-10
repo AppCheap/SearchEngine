@@ -7,7 +7,8 @@ namespace Appcheap\SearchEngine\App\Exception;
  */
 class NotFoundException extends HttpClientError
 {
-    public function __construct(string $errorMessage = "Not Found - The requested resource is not found.") {
+    public function __construct(string $errorMessage = "Not Found - The requested resource is not found.")
+    {
         parent::__construct(404, $errorMessage);
     }
 }

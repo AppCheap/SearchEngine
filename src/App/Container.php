@@ -6,7 +6,7 @@ use Appcheap\SearchEngine\App\Proxy\MemoryProxy;
 
 /**
  * Class Container
- * 
+ *
  * DI container.
  */
 class Container
@@ -70,7 +70,8 @@ class Container
      * @param string $id The identifier to check.
      * @return bool Returns true if the container has a binding for the identifier, false otherwise.
      */
-    public function has(string $id): bool {
+    public function has(string $id): bool
+    {
         return isset($this->bindings[$id]) || isset($this->instances[$id]);
     }
 }

@@ -1,7 +1,9 @@
 <?php
+
 namespace Appcheap\SearchEngine\Service\Engine\Models;
 
-class Schema {
+class Schema
+{
     /**
      * @var string $name The name of the collection
      */
@@ -23,7 +25,8 @@ class Schema {
      * @param string $name The name of the collection
      * @param Field[] $fields The fields of the schema
      */
-    public function __construct(string $name, array $fields) {
+    public function __construct(string $name, array $fields)
+    {
         $this->name = $name;
         $this->fields = $fields;
     }
@@ -36,7 +39,8 @@ class Schema {
      * @param string $defaultSortingField The default sorting field
      * @return Schema The schema object
      */
-    public function setDefaultSortingField(string $defaultSortingField): Schema {
+    public function setDefaultSortingField(string $defaultSortingField): Schema
+    {
         $this->defaultSortingField = $defaultSortingField;
         return $this;
     }
@@ -46,7 +50,8 @@ class Schema {
      *
      * @return string The name of the collection
      */
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->name;
     }
 
@@ -55,7 +60,8 @@ class Schema {
      *
      * @return Field[] The fields of the schema
      */
-    public function getFields(): array {
+    public function getFields(): array
+    {
         return $this->fields;
     }
 
@@ -64,7 +70,8 @@ class Schema {
      *
      * @return array The schema fields in Algolia's format
      */
-    public function toAlgoliaSchema(): array {
+    public function toAlgoliaSchema(): array
+    {
         // Convert schema fields to Algolia's format if needed
         $algoliaFields = [];
         foreach ($this->fields as $field) {
@@ -90,10 +97,11 @@ class Schema {
 
     /**
      * Convert the schema fields to Typesense's format.
-     * 
+     *
      * @return array The schema fields in Typesense's format
      */
-    public function toTypesenseSchema(): array {
+    public function toTypesenseSchema(): array
+    {
         $schema = [
             'name' => $this->name,
         ];
@@ -167,10 +175,11 @@ class Schema {
 
     /**
      * Convert the schema fields to Elasticsearch's format.
-     * 
+     *
      * @return array The schema fields in Elasticsearch's format
      */
-    public function toElasticsearchSchema(): array {
+    public function toElasticsearchSchema(): array
+    {
         // Convert schema fields to Elasticsearch's format
         $elasticsearchFields = [];
         foreach ($this->fields as $field) {
@@ -193,10 +202,11 @@ class Schema {
 
     /**
      * Convert the schema fields to MeiliSearch's format.
-     * 
+     *
      * @return array The schema fields in MeiliSearch's format
      */
-    public function toMeiliSearchSchema(): array {
+    public function toMeiliSearchSchema(): array
+    {
         // Convert schema fields to MeiliSearch's format
         $meilisearchFields = [];
         foreach ($this->fields as $field) {

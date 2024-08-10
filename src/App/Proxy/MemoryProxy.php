@@ -1,4 +1,5 @@
 <?php
+
 namespace Appcheap\SearchEngine\App\Proxy;
 
 /**
@@ -37,10 +38,11 @@ class MemoryProxy
 
     /**
      * Get the actual instance.
-     * 
+     *
      * @return mixed The actual instance.
      */
-    public function getInstance() {
+    public function getInstance()
+    {
         if ($this->instance === null) {
             $this->instance = ($this->initializer)();
         }

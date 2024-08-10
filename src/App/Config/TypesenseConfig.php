@@ -2,30 +2,36 @@
 
 namespace Appcheap\SearchEngine\App\Config;
 
-class TypesenseConfig {
+class TypesenseConfig
+{
     private $apiKey;
     private $nodes;
     private $connectionTimeoutSeconds;
 
-    public function __construct($apiKey, $nodes = [], $connectionTimeoutSeconds = 2.0) {
+    public function __construct($apiKey, $nodes = [], $connectionTimeoutSeconds = 2.0)
+    {
         $this->apiKey = $apiKey;
         $this->nodes = $nodes;
         $this->connectionTimeoutSeconds = $connectionTimeoutSeconds;
     }
 
-    public function getApiKey() {
+    public function getApiKey()
+    {
         return $this->apiKey ?? '';
     }
 
-    public function getNodes() {
+    public function getNodes()
+    {
         return $this->nodes;
     }
 
-    public function getConnectionTimeoutSeconds() {
+    public function getConnectionTimeoutSeconds()
+    {
         return $this->connectionTimeoutSeconds;
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         if (count($this->nodes) === 0) {
             return '';
         }

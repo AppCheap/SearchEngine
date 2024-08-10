@@ -1,8 +1,11 @@
 <?php
+
 namespace Appcheap\SearchEngine\App\Http;
 
-class HttpClientFactory {
-    public static function createHttpClient(string $type, array $config = []): HttpClientInterface {
+class HttpClientFactory
+{
+    public static function createHttpClient(string $type, array $config = []): HttpClientInterface
+    {
         switch ($type) {
             case 'guzzle':
                 return new GuzzleHttpClient($config);

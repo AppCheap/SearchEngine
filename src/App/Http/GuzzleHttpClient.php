@@ -16,7 +16,7 @@ class GuzzleHttpClient implements HttpClientInterface
 
     /**
      * GuzzleHttpClient constructor.
-     * 
+     *
      * @param array $config The configuration for the Guzzle client.
      */
     public function __construct($config)

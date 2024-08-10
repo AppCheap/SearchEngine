@@ -2,7 +2,6 @@
 
 namespace Appcheap\SearchEngine\App\Http;
 
-
 use Appcheap\SearchEngine\App\Exception\HttpClientErrorFactory;
 use Appcheap\SearchEngine\App\Exception\HttpClientError;
 
@@ -39,10 +38,10 @@ class CurlHttpClient implements HttpClientInterface
     /**
      * Send an HTTP request using cURL.
      *
-     * @param string $method The HTTP method (GET, POST, PUT, DELETE).
-     * @param string $url The URL to send the request to.
-     * @param array $data The data to send with the request.
-     * @param array $headers The headers to send with the request.
+     * @param  string $method  The HTTP method (GET, POST, PUT, DELETE).
+     * @param  string $url     The URL to send the request to.
+     * @param  array  $data    The data to send with the request.
+     * @param  array  $headers The headers to send with the request.
      * @return mixed The response from the server.
      * @throws HttpClientError If there is a cURL error.
      */
@@ -80,7 +79,7 @@ class CurlHttpClient implements HttpClientInterface
         call_user_func($this->curlClose, $ch);
 
         if ($error) {
-            throw HttpClientErrorFactory::createException($statusCode,  $error);
+            throw HttpClientErrorFactory::createException($statusCode, $error);
         }
 
         return json_decode($response, true);

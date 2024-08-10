@@ -1,4 +1,5 @@
 <?php
+
 namespace Appcheap\SearchEngine\Service\Engine;
 
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
@@ -6,7 +7,8 @@ use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
 use Appcheap\SearchEngine\Service\Engine\SearchServiceInterface;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
 
-class ElasticsearchService implements SearchServiceInterface {
+class ElasticsearchService implements SearchServiceInterface
+{
     /**
      * @var HttpClientInterface The HTTP client to use for requests.
      */
@@ -29,7 +31,8 @@ class ElasticsearchService implements SearchServiceInterface {
      * @param string $baseUrl The Elasticsearch base URL.
      * @param string $apiKey The Elasticsearch API key.
      */
-    public function __construct(HttpClientInterface $httpClient, string $baseUrl, string $apiKey) {
+    public function __construct(HttpClientInterface $httpClient, string $baseUrl, string $apiKey)
+    {
         $this->httpClient = $httpClient;
         $this->baseUrl = $baseUrl;
         $this->apiKey = $apiKey;
@@ -38,7 +41,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function createCollection(string $name, Schema $schema): void {
+    public function createCollection(string $name, Schema $schema): void
+    {
         $url = $this->baseUrl . '/' . $name;
         $this->httpClient->put($url, $schema->toElasticsearchSchema(), [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -48,7 +52,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function indexDocument(string $name, array $document): string {
+    public function indexDocument(string $name, array $document): string
+    {
         $url = $this->baseUrl . '/_doc';
         $response = $this->httpClient->post($url, $document, [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -59,7 +64,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function search(string $name, SearchQuery $query): array {
+    public function search(string $name, SearchQuery $query): array
+    {
         $url = $this->baseUrl . '/_search';
         $response = $this->httpClient->post($url, $query->toArray(), [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -70,7 +76,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function deleteDocument(string $name, string $objectId): void {
+    public function deleteDocument(string $name, string $objectId): void
+    {
         $url = $this->baseUrl . '/_doc/' . $objectId;
         $this->httpClient->delete($url, [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -80,7 +87,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function deleteCollection(string $name): void {
+    public function deleteCollection(string $name): void
+    {
         $url = $this->baseUrl . '/' . $name;
         $this->httpClient->delete($url, [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -90,7 +98,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function getDocument(string $name, string $objectId): array {
+    public function getDocument(string $name, string $objectId): array
+    {
         $url = $this->baseUrl . '/_doc/' . $objectId;
         return $this->httpClient->get($url, [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -100,7 +109,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function updateDocument(string $name, string $objectId, array $document): void {
+    public function updateDocument(string $name, string $objectId, array $document): void
+    {
         $url = $this->baseUrl . '/_doc/' . $objectId;
         $this->httpClient->put($url, $document, [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -110,7 +120,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function updateSchema(string $name, Schema $schema): void {
+    public function updateSchema(string $name, Schema $schema): void
+    {
         $url = $this->baseUrl . '/' . $name;
         $this->httpClient->put($url, $schema->toElasticsearchSchema(), [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -120,7 +131,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function getSchema(string $name): array {
+    public function getSchema(string $name): array
+    {
         $url = $this->baseUrl . '/' . $name;
         $response = $this->httpClient->get($url, [
             'Authorization: ApiKey ' . $this->apiKey,
@@ -131,7 +143,8 @@ class ElasticsearchService implements SearchServiceInterface {
     /**
      * {@inheritdoc}
      */
-    public function getCollection(string $name): array {
+    public function getCollection(string $name): array
+    {
         $url = $this->baseUrl . '/' . $name;
         return $this->httpClient->get($url, [
             'Authorization: ApiKey ' . $this->apiKey,

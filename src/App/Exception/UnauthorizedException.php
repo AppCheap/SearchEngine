@@ -7,7 +7,8 @@ namespace Appcheap\SearchEngine\App\Exception;
  */
 class UnauthorizedException extends HttpClientError
 {
-    public function __construct(string $errorMessage = "Unauthorized - Your API key is wrong.") {
+    public function __construct(string $errorMessage = "Unauthorized - Your API key is wrong.")
+    {
         parent::__construct(401, $errorMessage);
     }
 }
