@@ -12,7 +12,7 @@ class SearchQuery
     {
         $this->q = $q;
         $this->query_by = $query_by;
-      // ... other defaults
+        // ... other defaults
     }
 
     // Getters

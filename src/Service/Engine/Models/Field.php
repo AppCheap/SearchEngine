@@ -2,6 +2,14 @@
 
 namespace Appcheap\SearchEngine\Service\Engine\Models;
 
+use Appcheap\SearchEngine\App\Exception\FieldException;
+
+/**
+ * Field class.
+ *
+ * Represents a field in a document.
+ *
+ */
 class Field
 {
     /**
@@ -17,266 +25,255 @@ class Field
     /**
      * @var bool Enables faceting on the field.
      */
-    private $facet;
+    private $facet = false;
 
     /**
      * @var bool When set to true, the field can have empty, null or missing values.
      */
-    private $optional;
+    private $optional = true;
 
     /**
      * @var bool When set to false, the field will not be indexed in any in-memory index.
      */
-    private $index;
+    private $index = true;
 
     /**
      * @var bool When set to false, the field value will not be stored on disk.
      */
-    private $store;
+    private $store = true;
 
     /**
      * @var bool When set to true, the field will be sortable.
      */
-    private $sort;
+    private $sort = false;
 
     /**
      * @var bool When set to true, the field value can be infix-searched.
      */
-    private $infix;
+    private $infix = false;
 
     /**
      * @var string For configuring language specific tokenization.
      */
-    private $locale;
+    private $locale = '';
 
     /**
      * @var int Set this to a non-zero value to treat a field of type float[] as a vector field.
      */
-    private $num_dim;
+    private $num_dim = 0;
 
     /**
      * @var string The distance metric to be used for vector search.
      */
-    private $vec_dist;
+    private $vec_dist = 'cosine';
 
     /**
      * @var string Name of a field in another collection that should be linked to this collection.
      */
-    private $reference;
+    private $reference = '';
 
     /**
      * @var bool Enables an index optimized for range filtering on numerical fields.
      */
-    private $range_index;
+    private $range_index = false;
 
     /**
      * @var bool Values are stemmed before indexing in-memory.
      */
-    private $stem;
+    private $stem = false;
 
     /**
-     * Field constructor.
+     * Magic method to get the value of a private property.
      *
-     * @param string $name The name of the field.
-     * @param string $type The type of the field.
-     * @param bool $facet Enables faceting on the field. Default: false.
-     * @param bool $optional When set to true, the field can have empty, null or missing values. Default: false.
-     * @param bool $index When set to false, the field will not be indexed in any in-memory index. Default: true.
-     * @param bool $store When set to false, the field value will not be stored on disk. Default: true.
-     * @param bool $sort When set to true, the field will be sortable. Default: false.
-     * @param bool $infix When set to true, the field value can be infix-searched. Default: false.
-     * @param string $locale For configuring language specific tokenization. Default: 'en'.
-     * @param int $num_dim Set this to a non-zero value to treat a field of type float[] as a vector field. Default: 0.
-     * @param string $vec_dist The distance metric to be used for vector search. Default: 'cosine'.
-     * @param string $reference Name of a field in another collection that should be linked to this collection.
-     * @param bool $range_index Enables an index optimized for range filtering on numerical fields. Default: false.
-     * @param bool $stem Values are stemmed before indexing in-memory. Default: false.
+     * @param string $name The name of the property.
+     * @return mixed The value of the property.
+     * @throws \Exception If the property does not exist.
      */
-    public function __construct(
-        string $name,
-        string $type,
-        bool $facet = false,
-        bool $optional = false,
-        bool $index = true,
-        bool $store = true,
-        bool $sort = false,
-        bool $infix = false,
-        string $locale = 'en',
-        int $num_dim = 0,
-        string $vec_dist = 'cosine',
-        string $reference = '',
-        bool $range_index = false,
-        bool $stem = false
-    ) {
-        $this->name = $name;
-        $this->type = $type;
-        $this->facet = $facet;
-        $this->optional = $optional;
-        $this->index = $index;
-        $this->store = $store;
-        $this->sort = $sort;
-        $this->infix = $infix;
-        $this->locale = $locale;
-        $this->num_dim = $num_dim;
-        $this->vec_dist = $vec_dist;
-        $this->reference = $reference;
-        $this->range_index = $range_index;
-        $this->stem = $stem;
+    public function __get(string $name)
+    {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
+
+        throw new FieldException("Property {$name} does not exist");
     }
 
     /**
-     * Get the name of the field.
+     * Magic method to set the value of a private property.
      *
-     * @return string
+     * @param string $name  The name of the property.
+     * @param mixed  $value The value to set.
+     * @return void Nothing.
+     * @throws \Exception If the property does not exist.
      */
-    public function getName(): string
+    public function __set(string $name, mixed $value)
     {
-        return $this->name;
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+        } else {
+            throw new FieldException("Property {$name} does not exist");
+        }
     }
 
     /**
-     * Get the type of the field.
+     * Creates a new Field instance.
      *
-     * @return string
+     * @param array $fields The array of fields to create the instance with.
+     * @return self The newly created Field instance.
      */
-    public function getType(): string
+    public static function create(array $fields): self
     {
-        return $this->type;
+
+        self::validate($fields);
+
+        $field = new self();
+        foreach ($fields as $key => $value) {
+            $field->$key = $value;
+        }
+
+        return $field;
     }
 
-    // Add getter methods for the new properties
-
-    public function isFacet(): bool
+    /**
+     * Validates input for the Field instance.
+     * @param array $fields The array of fields to validate.
+     * @return void Nothing.
+     * @throws \Exception If the input is invalid.
+     */
+    public static function validate(array $fields): void
     {
-        return $this->facet;
+        $valid_fields = [
+            'name' => 'string|required',
+            'type' => 'string|required',
+            'facet' => 'bool|optional',
+            'optional' => 'bool|optional',
+            'index' => 'bool|optional',
+            'store' => 'bool|optional',
+            'sort' => 'bool|optional',
+            'infix' => 'bool|optional',
+            'locale' => 'string|optional',
+            'num_dim' => 'int|optional',
+            'vec_dist' => 'string|optional',
+            'reference' => 'string|optional',
+            'range_index' => 'bool|optional',
+            'stem' => 'bool|optional',
+        ];
+
+        foreach ($valid_fields as $key => $value) {
+            $types = explode('|', $value);
+            // Check missing required fields
+            if (in_array('required', $types) && !array_key_exists($key, $fields)) {
+                throw new FieldException("Field: {$key} is required");
+            }
+        }
+
+        foreach ($fields as $key => $value) {
+            if (!array_key_exists($key, $valid_fields)) {
+                throw new FieldException("Invalid field: {$key}");
+            }
+
+            $types = explode('|', $valid_fields[$key]);
+            $valid = false;
+            foreach ($types as $type) {
+                if ($type === 'required' && empty($value)) {
+                    $valid = false;
+                    throw new FieldException("Field: {$key} is required");
+                    break;
+                }
+
+                if ($type === 'optional' && $value === null) {
+                    $valid = true;
+                    break;
+                }
+
+                if ($type === 'bool' && is_bool($value)) {
+                    $valid = true;
+                    break;
+                }
+
+                if ($type === 'int' && is_int($value)) {
+                    $valid = true;
+                    break;
+                }
+
+                if ($type === 'string' && is_string($value)) {
+                    $valid = true;
+                    break;
+                }
+
+                if ($type === 'array' && is_array($value)) {
+                    $valid = true;
+                    break;
+                }
+            }
+
+            if (!$valid) {
+                throw new FieldException("Invalid value for field: {$key}");
+            }
+        }
     }
 
-    public function isOptional(): bool
+    /**
+     * To array method.
+     *
+     * @return array The array representation of the Field instance.
+     */
+    public function toArray(): array
     {
-        return $this->optional;
-    }
+        $array = [
+            'name' => $this->name,
+            'type' => $this->type,
+        ];
 
-    public function isIndex(): bool
-    {
-        return $this->index;
-    }
+        // Add optional fields if they are set and not the default value
+        if ($this->facet !== false) {
+            $array['facet'] = $this->facet;
+        }
 
-    public function isStore(): bool
-    {
-        return $this->store;
-    }
+        if ($this->optional !== true) {
+            $array['optional'] = $this->optional;
+        }
 
-    public function isSort(): bool
-    {
-        return $this->sort;
-    }
+        if ($this->index !== true) {
+            $array['index'] = $this->index;
+        }
 
-    public function isInfix(): bool
-    {
-        return $this->infix;
-    }
+        if ($this->store !== true) {
+            $array['store'] = $this->store;
+        }
 
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
+        if ($this->sort !== false) {
+            $array['sort'] = $this->sort;
+        }
 
-    public function getNumDim(): int
-    {
-        return $this->num_dim;
-    }
+        if ($this->infix !== false) {
+            $array['infix'] = $this->infix;
+        }
 
-    public function getVecDist(): string
-    {
-        return $this->vec_dist;
-    }
+        if ($this->locale !== '') {
+            $array['locale'] = $this->locale;
+        }
 
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
+        if ($this->num_dim !== 0) {
+            $array['num_dim'] = $this->num_dim;
+        }
 
-    public function isRangeIndex(): bool
-    {
-        return $this->range_index;
-    }
+        if ($this->vec_dist !== 'cosine') {
+            $array['vec_dist'] = $this->vec_dist;
+        }
 
-    public function isStem(): bool
-    {
-        return $this->stem;
-    }
+        if ($this->reference !== '') {
+            $array['reference'] = $this->reference;
+        }
 
-    // Setters
+        if ($this->range_index !== false) {
+            $array['range_index'] = $this->range_index;
+        }
 
-    public function setFacet(bool $facet): self
-    {
-        $this->facet = $facet;
-        return $this;
-    }
+        if ($this->stem !== false) {
+            $array['stem'] = $this->stem;
+        }
 
-    public function setOptional(bool $optional): self
-    {
-        $this->optional = $optional;
-        return $this;
-    }
-
-    public function setIndex(bool $index): self
-    {
-        $this->index = $index;
-        return $this;
-    }
-
-    public function setStore(bool $store): self
-    {
-        $this->store = $store;
-        return $this;
-    }
-
-    public function setSort(bool $sort): self
-    {
-        $this->sort = $sort;
-        return $this;
-    }
-
-    public function setInfix(bool $infix): self
-    {
-        $this->infix = $infix;
-        return $this;
-    }
-
-    public function setLocale(string $locale): self
-    {
-        $this->locale = $locale;
-        return $this;
-    }
-
-    public function setNumDim(int $num_dim): self
-    {
-        $this->num_dim = $num_dim;
-        return $this;
-    }
-
-    public function setVecDist(string $vec_dist): self
-    {
-        $this->vec_dist = $vec_dist;
-        return $this;
-    }
-
-    public function setReference(string $reference): self
-    {
-        $this->reference = $reference;
-        return $this;
-    }
-
-    public function setRangeIndex(bool $range_index): self
-    {
-        $this->range_index = $range_index;
-        return $this;
-    }
-
-    public function setStem(bool $stem): self
-    {
-        $this->stem = $stem;
-        return $this;
+        return $array;
     }
 }

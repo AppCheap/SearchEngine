@@ -41,10 +41,10 @@ class ElasticsearchService implements SearchServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createCollection(string $name, Schema $schema): void
+    public function createCollection(string $name, Schema $schema): array
     {
         $url = $this->baseUrl . '/' . $name;
-        $this->httpClient->put($url, $schema->toElasticsearchSchema(), [
+        return $this->httpClient->put($url, $schema->toElasticsearchSchema(), [
             'Authorization: ApiKey ' . $this->apiKey,
         ]);
     }

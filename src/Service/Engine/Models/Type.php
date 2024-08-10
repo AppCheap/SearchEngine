@@ -4,23 +4,23 @@ namespace Appcheap\SearchEngine\Service\Engine\Models;
 
 class Type
 {
-    const STRING = 'string';
-    const STRING_ARRAY = 'string[]';
-    const INT32 = 'int32';
-    const INT32_ARRAY = 'int32[]';
-    const INT64 = 'int64';
-    const INT64_ARRAY = 'int64[]';
-    const FLOAT = 'float';
-    const FLOAT_ARRAY = 'float[]';
-    const BOOL = 'bool';
-    const BOOL_ARRAY = 'bool[]';
-    const GEOPOINT = 'geopoint';
-    const GEOPOINT_ARRAY = 'geopoint[]';
-    const OBJECT = 'object';
-    const OBJECT_ARRAY = 'object[]';
-    const STRING_STAR = 'string*';
-    const IMAGE = 'image';
-    const AUTO = 'auto';
+    public const STRING = 'string';
+    public const STRING_ARRAY = 'string[]';
+    public const INT32 = 'int32';
+    public const INT32_ARRAY = 'int32[]';
+    public const INT64 = 'int64';
+    public const INT64_ARRAY = 'int64[]';
+    public const FLOAT = 'float';
+    public const FLOAT_ARRAY = 'float[]';
+    public const BOOL = 'bool';
+    public const BOOL_ARRAY = 'bool[]';
+    public const GEOPOINT = 'geopoint';
+    public const GEOPOINT_ARRAY = 'geopoint[]';
+    public const OBJECT = 'object';
+    public const OBJECT_ARRAY = 'object[]';
+    public const STRING_STAR = 'string*';
+    public const IMAGE = 'image';
+    public const AUTO = 'auto';
 
     /**
      * Get all supported types.
