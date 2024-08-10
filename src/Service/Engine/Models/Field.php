@@ -144,19 +144,19 @@ class Field
     {
         $valid_fields = [
             'name' => 'string|required',
-            'type' => 'string|required',
-            'facet' => 'bool|optional',
-            'optional' => 'bool|optional',
-            'index' => 'bool|optional',
-            'store' => 'bool|optional',
-            'sort' => 'bool|optional',
-            'infix' => 'bool|optional',
+            'type' => 'string|required|in:Type::getAllTypes',
+            'facet' => 'boolean|optional',
+            'optional' => 'boolean|optional',
+            'index' => 'boolean|optional',
+            'store' => 'boolean|optional',
+            'sort' => 'boolean|optional',
+            'infix' => 'boolean|optional',
             'locale' => 'string|optional',
-            'num_dim' => 'int|optional',
+            'num_dim' => 'integer|optional',
             'vec_dist' => 'string|optional',
             'reference' => 'string|optional',
-            'range_index' => 'bool|optional',
-            'stem' => 'bool|optional',
+            'range_index' => 'boolean|optional',
+            'stem' => 'boolean|optional',
         ];
 
         foreach ($valid_fields as $key => $value) {
@@ -173,42 +173,30 @@ class Field
             }
 
             $types = explode('|', $valid_fields[$key]);
+
             $valid = false;
             foreach ($types as $type) {
                 if ($type === 'required' && empty($value)) {
-                    $valid = false;
                     throw new FieldException("Field: {$key} is required");
+                    break;
+                }
+
+                if ($type === 'in:Type::getAllTypes' && !in_array($value, Type::getAllTypes())) {
+                    throw new FieldException("Invalid type for field: {$key} with value: {$value}");
                     break;
                 }
 
                 if ($type === 'optional' && $value === null) {
                     $valid = true;
-                    break;
                 }
 
-                if ($type === 'bool' && is_bool($value)) {
+                if ($value !== null && in_array($type, ['boolean', 'integer', 'string', 'array']) && gettype($value) === $type) {
                     $valid = true;
-                    break;
-                }
-
-                if ($type === 'int' && is_int($value)) {
-                    $valid = true;
-                    break;
-                }
-
-                if ($type === 'string' && is_string($value)) {
-                    $valid = true;
-                    break;
-                }
-
-                if ($type === 'array' && is_array($value)) {
-                    $valid = true;
-                    break;
                 }
             }
 
             if (!$valid) {
-                throw new FieldException("Invalid value for field: {$key}");
+                throw new FieldException("Invalid value for field: {$key} with value: {$value}");
             }
         }
     }
