@@ -11,7 +11,7 @@ class HttpClientFactory
                 return new GuzzleHttpClient($config);
             case 'curl':
                 return new CurlHttpClient();
-            case 'wordpress':
+            case 'WordPress':
                 return new WpHttpClient();
             default:
                 throw new \InvalidArgumentException("Unknown HTTP client type: $type");

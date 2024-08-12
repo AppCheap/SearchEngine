@@ -264,4 +264,99 @@ class Field
 
         return $array;
     }
+
+    /**
+     * Get all fields.
+     *
+     * @return array The array of all fields.
+     */
+    public static function getAllFields(): array
+    {
+        return [
+            'name' => [
+                'json_data_type' => 'string',
+                'description' => 'The name of the field.',
+                'optional' => false,
+                'default' => '',
+            ],
+            'type' => [
+                'json_data_type' => 'string',
+                'description' => 'The type of the field.',
+                'optional' => false,
+                'default' => '',
+            ],
+            'facet' => [
+                'json_data_type' => 'boolean',
+                'description' => 'Enables faceting on the field.',
+                'optional' => true,
+                'default' => false,
+            ],
+            'optional' => [
+                'json_data_type' => 'boolean',
+                'description' => 'When set to true, the field can have empty, null or missing values.',
+                'optional' => true,
+                'default' => true,
+            ],
+            'index' => [
+                'json_data_type' => 'boolean',
+                'description' => 'When set to false, the field will not be indexed in any in-memory index.',
+                'optional' => true,
+                'default' => true,
+            ],
+            'store' => [
+                'json_data_type' => 'boolean',
+                'description' => 'When set to false, the field value will not be stored on disk.',
+                'optional' => true,
+                'default' => true,
+            ],
+            'sort' => [
+                'json_data_type' => 'boolean',
+                'description' => 'When set to true, the field will be sortable.',
+                'optional' => true,
+                'default' => false,
+            ],
+            'infix' => [
+                'json_data_type' => 'boolean',
+                'description' => 'When set to true, the field value can be infix-searched.',
+                'optional' => true,
+                'default' => false,
+            ],
+            'locale' => [
+                'json_data_type' => 'string',
+                'description' => 'For configuring language specific tokenization.',
+                'optional' => true,
+                'default' => '',
+            ],
+            'num_dim' => [
+                'json_data_type' => 'integer',
+                'description' => 'Set this to a non-zero value to treat a field of type float[] as a vector field.',
+                'optional' => true,
+                'default' => 0,
+            ],
+            'vec_dist' => [
+                'json_data_type' => 'string',
+                'description' => 'The distance metric to be used for vector search.',
+                'optional' => true,
+                'default' => 'cosine',
+            ],
+            'reference' => [
+                'json_data_type' => 'string',
+                'description' => 'Name of a field in another collection that should be linked to this collection.',
+                'optional' => true,
+                'default' => '',
+            ],
+            'range_index' => [
+                'json_data_type' => 'boolean',
+                'description' => 'Enables an index optimized for range filtering on numerical fields.',
+                'optional' => true,
+                'default' => false,
+            ],
+            'stem' => [
+                'json_data_type' => 'boolean',
+                'description' => 'Values are stemmed before indexing in-memory.',
+                'optional' => true,
+                'default' => false,
+            ],
+        ];
+    }
 }
