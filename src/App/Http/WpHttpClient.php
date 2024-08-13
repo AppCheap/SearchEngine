@@ -15,9 +15,9 @@ class WpHttpClient implements HttpClientInterface
     /**
      * Send an HTTP request using wp_remote_request.
      *
-     * @param string $method The HTTP method (GET, POST, PUT, DELETE).
-     * @param string $url The URL to send the request to.
-     * @param array $options The options to send with the request.
+     * @param string $method  The HTTP method (GET, POST, PUT, DELETE).
+     * @param string $url     The URL to send the request to.
+     * @param array  $options The options to send with the request.
      * @return mixed The response from the server.
      * @throws HttpClientError If there is an HTTP error.
      */
@@ -32,7 +32,8 @@ class WpHttpClient implements HttpClientInterface
         $response = wp_remote_request($url, $args);
 
         if (is_wp_error($response)) {
-            throw HttpClientErrorFactory::createException($response->get_error_code(), $response->get_error_message());
+            $code = $response->get_error_code();
+            throw HttpClientErrorFactory::createException(is_int($code) ? $code : 0, $response->get_error_message());
         }
 
         $statusCode = wp_remote_retrieve_response_code($response);
