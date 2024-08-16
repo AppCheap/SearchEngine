@@ -17,11 +17,11 @@ interface HttpClientInterface
      * Send a POST request to the specified URL.
      *
      * @param string $url
-     * @param array $data
+     * @param mixed $data
      * @param array $headers
      * @return mixed
      */
-    public function post(string $url, array $data, array $headers = []);
+    public function post(string $url, mixed $data, array $headers = []);
 
     /**
      * Send a PUT request to the specified URL.

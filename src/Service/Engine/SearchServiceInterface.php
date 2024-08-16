@@ -32,6 +32,15 @@ interface SearchServiceInterface
     public function indexDocument(string $name, array $document): string;
 
     /**
+     * Bulk index documents in the search service.
+     * 
+     * @param string $name The name of the collection to index the documents in.
+     * @param array $documents The documents to be indexed.
+     * @return mixed The response from the server.
+     */
+    public function bulkIndexDocuments(string $name, array $documents);
+
+    /**
      * Search for documents that match the given query.
      *
      * @param string $name The name of the collection to search in.

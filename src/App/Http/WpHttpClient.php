@@ -29,21 +29,7 @@ class WpHttpClient implements HttpClientInterface
             'body' => $options['body'] ?? null,
         ], $options);
 
-        $response = wp_remote_request($url, $args);
-
-        if (is_wp_error($response)) {
-            $code = $response->get_error_code();
-            throw HttpClientErrorFactory::createException(is_int($code) ? $code : 0, $response->get_error_message());
-        }
-
-        $statusCode = wp_remote_retrieve_response_code($response);
-
-        if ($statusCode >= 400) {
-            $message = wp_remote_retrieve_response_message($response);
-            throw HttpClientErrorFactory::createException($statusCode, $message);
-        }
-
-        return json_decode(wp_remote_retrieve_body($response), true);
+        return wp_remote_request($url, $args);
     }
 
     /**
@@ -57,11 +43,11 @@ class WpHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function post(string $url, array $data, array $headers = [])
+    public function post(string $url, mixed $data, array $headers = [])
     {
         return $this->sendRequest('POST', $url, [
             'headers' => $headers,
-            'body' => json_encode($data)
+            'body' => is_string($data) ? $data : json_encode($data)
         ]);
     }
 

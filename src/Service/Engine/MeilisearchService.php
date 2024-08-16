@@ -75,6 +75,18 @@ class MeilisearchService implements SearchServiceInterface
     }
 
     /**
+     * Bulk index documents in Meilisearch.
+     *
+     * @param array $documents The documents to index.
+     */
+    public function bulkIndexDocuments(string $name, array $documents) {
+        $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents';
+        return $this->httpClient->post($url, $documents, [
+            'Authorization: Bearer ' . $this->apiKey,
+        ]);
+    }
+
+    /**
      * Search for documents in Meilisearch.
      *
      * @param SearchQuery $query The search query.

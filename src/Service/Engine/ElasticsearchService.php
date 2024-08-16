@@ -28,8 +28,8 @@ class ElasticsearchService implements SearchServiceInterface
      * ElasticsearchService constructor.
      *
      * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param string $baseUrl The Elasticsearch base URL.
-     * @param string $apiKey The Elasticsearch API key.
+     * @param string              $baseUrl    The Elasticsearch base URL.
+     * @param string              $apiKey     The Elasticsearch API key.
      */
     public function __construct(HttpClientInterface $httpClient, string $baseUrl, string $apiKey)
     {
@@ -59,6 +59,22 @@ class ElasticsearchService implements SearchServiceInterface
             'Authorization: ApiKey ' . $this->apiKey,
         ]);
         return $response['_id'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bulkIndexDocuments(string $name, array $documents)
+    {
+        $url = $this->baseUrl . '/_bulk';
+        $body = '';
+        foreach ($documents as $document) {
+            $body .= json_encode(['index' => ['_index' => $name]]) . "\n";
+            $body .= json_encode($document) . "\n";
+        }
+        return $this->httpClient->post($url, $body, [
+            'Authorization: ApiKey ' . $this->apiKey,
+        ]);
     }
 
     /**

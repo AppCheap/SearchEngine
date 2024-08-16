@@ -32,10 +32,10 @@ class AlgoliaService implements SearchServiceInterface
     /**
      * AlgoliaService constructor.
      *
-     * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param string $baseUrl The Algolia base URL.
-     * @param string $apiKey The Algolia API key.
-     * @param string $applicationId The Algolia application ID.
+     * @param HttpClientInterface $httpClient    The HTTP client to use for requests.
+     * @param string              $baseUrl       The Algolia base URL.
+     * @param string              $apiKey        The Algolia API key.
+     * @param string              $applicationId The Algolia application ID.
      */
     public function __construct(HttpClientInterface $httpClient, string $baseUrl, string $apiKey, string $applicationId)
     {
@@ -78,6 +78,15 @@ class AlgoliaService implements SearchServiceInterface
         // Send a POST request to the Algolia API to index a document.
         $response = $this->httpClient->post(sprintf("%s/indexes/documents", $this->baseUrl), $document, $this->getHeaders());
         return $response['objectID'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bulkIndexDocuments(string $name, array $documents)
+    {
+        // Send a POST request to the Algolia API to index documents.
+        return $this->httpClient->post(sprintf("%s/indexes/documents/batch", $this->baseUrl), $documents, $this->getHeaders());
     }
 
     /**

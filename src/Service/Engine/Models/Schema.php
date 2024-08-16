@@ -22,7 +22,7 @@ class Schema
     /**
      * Schema constructor.
      *
-     * @param string $name The name of the collection
+     * @param string  $name   The name of the collection
      * @param Field[] $fields The fields of the schema
      */
     public function __construct(string $name, array $fields)
@@ -108,60 +108,7 @@ class Schema
 
         $typesenseFields = [];
         foreach ($this->fields as $field) {
-            $typesenseField = [
-                'name' => $field->getName(),
-                'type' => $field->getType(),
-            ];
-
-            if ($field->isFacet()) {
-                $typesenseField['facet'] = $field->isFacet();
-            }
-
-            if ($field->isOptional()) {
-                $typesenseField['optional'] = $field->isOptional();
-            }
-
-            if ($field->isIndex() && $field->isIndex() !== true) {
-                $typesenseField['index'] = $field->isIndex();
-            }
-
-            if ($field->isStore() && $field->isStore() !== true) {
-                $typesenseField['store'] = $field->isStore();
-            }
-
-            if ($field->isSort()) {
-                $typesenseField['sort'] = $field->isSort();
-            }
-
-            if ($field->isInfix()) {
-                $typesenseField['infix'] = $field->isInfix();
-            }
-
-            if ($field->getLocale() && $field->getLocale() !== 'en') {
-                $typesenseField['locale'] = $field->getLocale();
-            }
-
-            if ($field->getNumDim()) {
-                $typesenseField['num_dim'] = $field->getNumDim();
-            }
-
-            if ($field->getVecDist() && $field->getVecDist() !== 'cosine') {
-                $typesenseField['vec_dist'] = $field->getVecDist();
-            }
-
-            if ($field->getReference()) {
-                $typesenseField['reference'] = $field->getReference();
-            }
-
-            if ($field->isRangeIndex()) {
-                $typesenseField['range_index'] = $field->isRangeIndex();
-            }
-
-            if ($field->isStem()) {
-                $typesenseField['stem'] = $field->isStem();
-            }
-
-            $typesenseFields[] = $typesenseField;
+            $typesenseFields[] = $field->toArray();
         }
 
         $schema['fields'] = $typesenseFields;

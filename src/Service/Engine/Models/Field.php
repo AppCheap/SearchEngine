@@ -118,20 +118,20 @@ class Field
     /**
      * Creates a new Field instance.
      *
-     * @param array $fields The array of fields to create the instance with.
+     * @param array $field The array of field attributes.
      * @return self The newly created Field instance.
      */
-    public static function create(array $fields): self
+    public static function create(array $field): self
     {
 
-        self::validate($fields);
+        self::validate($field);
 
-        $field = new self();
-        foreach ($fields as $key => $value) {
-            $field->$key = $value;
+        $obj = new self();
+        foreach ($field as $key => $value) {
+            $obj->$key = $value;
         }
 
-        return $field;
+        return $obj;
     }
 
     /**

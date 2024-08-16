@@ -24,7 +24,7 @@ class TypesenseService implements SearchServiceInterface
      * TypesenseService constructor.
      *
      * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param TypesenseConfig $config The Typesense configuration.
+     * @param TypesenseConfig     $config     The Typesense configuration.
      */
     public function __construct(HttpClientInterface $httpClient, TypesenseConfig $config)
     {
@@ -51,8 +51,8 @@ class TypesenseService implements SearchServiceInterface
     /**
      * Index a document in Typesense.
      *
-     * @param string $name The name of the collection.
-     * @param array $document The document to index.
+     * @param string $name     The name of the collection.
+     * @param array  $document The document to index.
      * @return string The ID of the indexed document.
      */
     public function indexDocument(string $name, array $document): string
@@ -65,9 +65,31 @@ class TypesenseService implements SearchServiceInterface
     }
 
     /**
+     * Bulk index documents in Typesense.
+     *
+     * @param string $name      The name of the collection.
+     * @param array  $documents The documents to index.
+     * @return mixed The response from the server.
+     */
+    public function bulkIndexDocuments(string $name, array $documents)
+    {
+
+        $data = '';
+        foreach ($documents as $document) {
+            $data .= json_encode($document) . "\n";
+        }
+
+        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/import?action=upsert';
+        return $this->httpClient->post($url, $data, [
+            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
+            'Content-Type' => 'text/plain',
+        ]);
+    }
+
+    /**
      * Search for documents in Typesense.
      *
-     * @param string $name The name of the collection.
+     * @param string      $name  The name of the collection.
      * @param SearchQuery $query The search query.
      * @return array The search results.
      */
@@ -87,7 +109,7 @@ class TypesenseService implements SearchServiceInterface
      * Delete a document from Typesense.
      *
      * @param string $collectionName The name of the collection.
-     * @param string $documentId The ID of the document to delete.
+     * @param string $documentId     The ID of the document to delete.
      */
     public function deleteDocument(string $name, string $documentId): void
     {
@@ -127,9 +149,9 @@ class TypesenseService implements SearchServiceInterface
     /**
      * Update a document in Typesense.
      *
-     * @param string $name The name of the collection.
+     * @param string $name       The name of the collection.
      * @param string $documentId The ID of the document to update.
-     * @param array $document The updated document.
+     * @param array  $document   The updated document.
      */
     public function updateDocument(string $name, string $documentId, array $document): void
     {
@@ -142,7 +164,7 @@ class TypesenseService implements SearchServiceInterface
     /**
      * Update the schema of a collection in Typesense.
      *
-     * @param string $name The name of the collection.
+     * @param string $name   The name of the collection.
      * @param Schema $schema The updated schema.
      */
     public function updateSchema(string $name, Schema $schema): void
