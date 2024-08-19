@@ -53,15 +53,15 @@ class TypesenseService implements SearchServiceInterface
      *
      * @param string $name     The name of the collection.
      * @param array  $document The document to index.
-     * @return string The ID of the indexed document.
+     * @return array The response from the server.
      */
-    public function indexDocument(string $name, array $document): string
+    public function indexDocument(string $name, array $document): array
     {
-        $url = $this->config->getUrl() . '/collections/' . $name . '/documents';
+        $url = $this->config->getUrl() . '/collections/' . $name . '/documents?action=upsert';
         $response = $this->httpClient->post($url, $document, [
             'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
         ]);
-        return $response['id'];
+        return $response;
     }
 
     /**

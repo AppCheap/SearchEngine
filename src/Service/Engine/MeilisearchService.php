@@ -33,9 +33,9 @@ class MeilisearchService implements SearchServiceInterface
      * MeilisearchService constructor.
      *
      * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param string $indexName The name of the index.
-     * @param string $baseUrl The Meilisearch base URL.
-     * @param string $apiKey The Meilisearch API key.
+     * @param string              $indexName  The name of the index.
+     * @param string              $baseUrl    The Meilisearch base URL.
+     * @param string              $apiKey     The Meilisearch API key.
      */
     public function __construct(HttpClientInterface $httpClient, string $indexName, string $baseUrl, string $apiKey)
     {
@@ -48,7 +48,7 @@ class MeilisearchService implements SearchServiceInterface
     /**
      * Create an index in Meilisearch.
      *
-     * @param string $name The name of the index.
+     * @param string $name   The name of the index.
      * @param Schema $schema The schema of the index.
      */
     public function createCollection(string $name, Schema $schema): void
@@ -60,18 +60,15 @@ class MeilisearchService implements SearchServiceInterface
     }
 
     /**
-     * Index a document in Meilisearch.
-     *
-     * @param array $document The document to index.
-     * @return string The ID of the indexed document.
+     * {@inheritdoc}
      */
-    public function indexDocument(string $name, array $document): string
+    public function indexDocument(string $name, array $document): array;
     {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents';
         $response = $this->httpClient->post($url, $document, [
             'Authorization: Bearer ' . $this->apiKey,
         ]);
-        return $response['id'];
+        return $response;
     }
 
     /**
@@ -79,7 +76,8 @@ class MeilisearchService implements SearchServiceInterface
      *
      * @param array $documents The documents to index.
      */
-    public function bulkIndexDocuments(string $name, array $documents) {
+    public function bulkIndexDocuments(string $name, array $documents)
+    {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents';
         return $this->httpClient->post($url, $documents, [
             'Authorization: Bearer ' . $this->apiKey,
@@ -145,7 +143,7 @@ class MeilisearchService implements SearchServiceInterface
      * Update a document in Meilisearch.
      *
      * @param string $documentId The ID of the document to update.
-     * @param array $document The updated document.
+     * @param array  $document   The updated document.
      */
     public function updateDocument(string $name, string $documentId, array $document): void
     {
@@ -158,7 +156,7 @@ class MeilisearchService implements SearchServiceInterface
     /**
      * Update the schema of an index in Meilisearch.
      *
-     * @param string $name The name of the index to update.
+     * @param string $name   The name of the index to update.
      * @param Schema $schema The updated schema.
      */
     public function updateSchema(string $name, Schema $schema): void

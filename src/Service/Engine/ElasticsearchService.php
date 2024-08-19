@@ -52,13 +52,13 @@ class ElasticsearchService implements SearchServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function indexDocument(string $name, array $document): string
+    public function indexDocument(string $name, array $document): array;
     {
         $url = $this->baseUrl . '/_doc';
         $response = $this->httpClient->post($url, $document, [
             'Authorization: ApiKey ' . $this->apiKey,
         ]);
-        return $response['_id'];
+        return $response;
     }
 
     /**

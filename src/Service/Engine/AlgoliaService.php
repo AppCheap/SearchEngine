@@ -73,11 +73,11 @@ class AlgoliaService implements SearchServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function indexDocument(string $name, array $document): string
+    public function indexDocument(string $name, array $document): array
     {
         // Send a POST request to the Algolia API to index a document.
         $response = $this->httpClient->post(sprintf("%s/indexes/documents", $this->baseUrl), $document, $this->getHeaders());
-        return $response['objectID'];
+        return $response;
     }
 
     /**

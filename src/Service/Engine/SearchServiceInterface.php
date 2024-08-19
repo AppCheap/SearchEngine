@@ -23,19 +23,19 @@ interface SearchServiceInterface
     public function createCollection(Schema $schema): array;
 
     /**
-     * Index a document in the search service.
+     * Index a document in the search engine.
      *
-     * @param string $name The name of the collection to index the document in.
-     * @param array $document The document to be indexed.
-     * @return string The ID of the indexed document.
+     * @param string $name     The name of the collection to index the document in.
+     * @param array  $document The document to be indexed.
+     * @return array The response from the server.
      */
-    public function indexDocument(string $name, array $document): string;
+    public function indexDocument(string $name, array $document): array;
 
     /**
      * Bulk index documents in the search service.
-     * 
-     * @param string $name The name of the collection to index the documents in.
-     * @param array $documents The documents to be indexed.
+     *
+     * @param string $name      The name of the collection to index the documents in.
+     * @param array  $documents The documents to be indexed.
      * @return mixed The response from the server.
      */
     public function bulkIndexDocuments(string $name, array $documents);
@@ -43,7 +43,7 @@ interface SearchServiceInterface
     /**
      * Search for documents that match the given query.
      *
-     * @param string $name The name of the collection to search in.
+     * @param string      $name  The name of the collection to search in.
      * @param SearchQuery $query The search query.
      * @return array An array of documents that match the query.
      */
@@ -53,7 +53,7 @@ interface SearchServiceInterface
      * Delete a document with the given ID from the search service.
      *
      * @param string $name The name of the collection to delete the document from.
-     * @param string $id The ID of the document to be deleted.
+     * @param string $id   The ID of the document to be deleted.
      * @return void
      */
     public function deleteDocument(string $name, string $id): void;
@@ -70,7 +70,7 @@ interface SearchServiceInterface
      * Get a document with the given ID from the search service.
      *
      * @param string $name The name of the collection to retrieve the document from.
-     * @param string $id The ID of the document to be retrieved.
+     * @param string $id   The ID of the document to be retrieved.
      * @return array The retrieved document.
      */
     public function getDocument(string $name, string $id): array;
@@ -78,9 +78,9 @@ interface SearchServiceInterface
     /**
      * Update a document with the given ID in the search service.
      *
-     * @param string $name The name of the collection to update the document in.
-     * @param string $id The ID of the document to be updated.
-     * @param array $document The updated document.
+     * @param string $name     The name of the collection to update the document in.
+     * @param string $id       The ID of the document to be updated.
+     * @param array  $document The updated document.
      * @return void
      */
     public function updateDocument(string $name, string $id, array $document): void;
@@ -88,7 +88,7 @@ interface SearchServiceInterface
     /**
      * Update the schema of a collection with the given name in the search service.
      *
-     * @param string $name The name of the collection to be updated.
+     * @param string $name   The name of the collection to be updated.
      * @param Schema $schema The updated schema.
      * @return void
      */

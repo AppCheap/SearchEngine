@@ -27,6 +27,7 @@ class WpHttpClient implements HttpClientInterface
             'method' => $method,
             'headers' => $options['headers'] ?? [],
             'body' => $options['body'] ?? null,
+            'timeout' => 30,
         ], $options);
 
         return wp_remote_request($url, $args);
