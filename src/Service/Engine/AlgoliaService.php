@@ -2,12 +2,13 @@
 
 namespace Appcheap\SearchEngine\Service\Engine;
 
+use Appcheap\SearchEngine\App\Config\AlgoliaConfig;
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
-use Appcheap\SearchEngine\Service\Engine\SearchServiceInterface;
+use Appcheap\SearchEngine\Service\Engine\SearchService;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
 
-class AlgoliaService implements SearchServiceInterface
+class AlgoliaService implements SearchService
 {
     /**
      * @var HttpClientInterface The HTTP client to use for requests.
@@ -32,17 +33,15 @@ class AlgoliaService implements SearchServiceInterface
     /**
      * AlgoliaService constructor.
      *
-     * @param HttpClientInterface $httpClient    The HTTP client to use for requests.
-     * @param string              $baseUrl       The Algolia base URL.
-     * @param string              $apiKey        The Algolia API key.
-     * @param string              $applicationId The Algolia application ID.
+     * @param HttpClientInterface $httpClient The HTTP client to use for requests.
+     * @param AlgoliaConfig       $config     The Algolia configuration.
      */
-    public function __construct(HttpClientInterface $httpClient, string $baseUrl, string $apiKey, string $applicationId)
+    public function __construct(HttpClientInterface $httpClient, AlgoliaConfig $config)
     {
         $this->httpClient = $httpClient;
-        $this->baseUrl = $baseUrl;
-        $this->apiKey = $apiKey;
-        $this->applicationId = $applicationId;
+        $this->baseUrl = '';
+        $this->apiKey = $config->getApiKey();
+        $this->applicationId = $config->getAppId();
     }
 
     /**

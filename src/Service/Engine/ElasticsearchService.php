@@ -2,12 +2,13 @@
 
 namespace Appcheap\SearchEngine\Service\Engine;
 
+use Appcheap\SearchEngine\App\Config\ElasticsearchConfig;
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
-use Appcheap\SearchEngine\Service\Engine\SearchServiceInterface;
+use Appcheap\SearchEngine\Service\Engine\SearchService;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
 
-class ElasticsearchService implements SearchServiceInterface
+class ElasticsearchService implements SearchService
 {
     /**
      * @var HttpClientInterface The HTTP client to use for requests.
@@ -28,14 +29,13 @@ class ElasticsearchService implements SearchServiceInterface
      * ElasticsearchService constructor.
      *
      * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param string              $baseUrl    The Elasticsearch base URL.
-     * @param string              $apiKey     The Elasticsearch API key.
+     * @param ElasticsearchConfig $config     The Elasticsearch configuration.
      */
-    public function __construct(HttpClientInterface $httpClient, string $baseUrl, string $apiKey)
+    public function __construct(HttpClientInterface $httpClient, ElasticsearchConfig $config)
     {
         $this->httpClient = $httpClient;
-        $this->baseUrl = $baseUrl;
-        $this->apiKey = $apiKey;
+        $this->baseUrl = $config->getHosts();
+        $this->apiKey = $config->getApiKey();
     }
 
     /**

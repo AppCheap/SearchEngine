@@ -28,7 +28,7 @@ class MemoryProxy
      *
      * @return mixed The result of the method call.
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments)
     {
         if ($this->instance === null) {
             $this->instance = ($this->initializer)();
@@ -39,12 +39,14 @@ class MemoryProxy
     /**
      * Get the actual instance.
      *
+     * @param mixed ...$params The parameters to pass to the initializer function.
+     *
      * @return mixed The actual instance.
      */
-    public function getInstance()
+    public function getInstance(mixed ...$params)
     {
         if ($this->instance === null) {
-            $this->instance = ($this->initializer)();
+            $this->instance = ($this->initializer)(...$params);
         }
         return $this->instance;
     }

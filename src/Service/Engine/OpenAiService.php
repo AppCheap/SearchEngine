@@ -2,13 +2,18 @@
 
 namespace Appcheap\SearchEngine\Service\Engine;
 
+use Appcheap\SearchEngine\App\Config\OpenAiConfig;
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
 use Appcheap\SearchEngine\Service\Engine\SearchService;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
 use Appcheap\SearchEngine\App\Config\TypesenseConfig;
+use Appcheap\SearchEngine\App\Exception\HttpClientError;
 
-class TypesenseService implements SearchService
+/**
+ * The OpenAI search service.
+ */
+class OpenAiService implements SearchService
 {
     /**
      * @var HttpClientInterface The HTTP client to use for requests.
@@ -21,12 +26,12 @@ class TypesenseService implements SearchService
     private $config;
 
     /**
-     * TypesenseService constructor.
+     * OpenAiService constructor.
      *
      * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param TypesenseConfig     $config     The Typesense configuration.
+     * @param OpenAiConfig        $config     The Open AI configuration.
      */
-    public function __construct(HttpClientInterface $httpClient, TypesenseConfig $config)
+    public function __construct(HttpClientInterface $httpClient, OpenAiConfig $config)
     {
         $this->httpClient = $httpClient;
         $this->config = $config;
@@ -42,10 +47,7 @@ class TypesenseService implements SearchService
      */
     public function createCollection(Schema $schema): array
     {
-        $url = $this->config->getUrl() . '/collections';
-        return $this->httpClient->post($url, $schema->toTypesenseSchema(), [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -57,11 +59,7 @@ class TypesenseService implements SearchService
      */
     public function indexDocument(string $name, array $document): array
     {
-        $url = $this->config->getUrl() . '/collections/' . $name . '/documents?action=upsert';
-        $response = $this->httpClient->post($url, $document, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
-        return $response;
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -74,16 +72,7 @@ class TypesenseService implements SearchService
     public function bulkIndexDocuments(string $name, array $documents)
     {
 
-        $data = '';
-        foreach ($documents as $document) {
-            $data .= json_encode($document) . "\n";
-        }
-
-        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/import?action=upsert';
-        return $this->httpClient->post($url, $data, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-            'Content-Type' => 'text/plain',
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -91,18 +80,13 @@ class TypesenseService implements SearchService
      *
      * @param string      $name  The name of the collection.
      * @param SearchQuery $query The search query.
+     *
      * @return array The search results.
+     * @throws HttpClientError If there is an HTTP error.
      */
     public function search(string $name, SearchQuery $query): array
     {
-        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/search';
-        $queryString = http_build_query($query->toArray());
-        $url .= '?' . $queryString;
-
-        $response = $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
-        return $response;
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -113,10 +97,7 @@ class TypesenseService implements SearchService
      */
     public function deleteDocument(string $name, string $documentId): void
     {
-        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
-        $this->httpClient->delete($url, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -126,10 +107,7 @@ class TypesenseService implements SearchService
      */
     public function deleteCollection(string $name): void
     {
-        $url = $this->config->getUrl() . '/collections/' . $name;
-        $this->httpClient->delete($url, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -140,10 +118,7 @@ class TypesenseService implements SearchService
      */
     public function getDocument(string $name, string $documentId): array
     {
-        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
-        return $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -155,10 +130,7 @@ class TypesenseService implements SearchService
      */
     public function updateDocument(string $name, string $documentId, array $document): void
     {
-        $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
-        $this->httpClient->put($url, $document, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -169,10 +141,7 @@ class TypesenseService implements SearchService
      */
     public function updateSchema(string $name, Schema $schema): void
     {
-        $url = $this->config->getUrl() . '/collections/' . $name;
-        $this->httpClient->put($url, $schema->toTypesenseSchema($name), [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -183,11 +152,7 @@ class TypesenseService implements SearchService
      */
     public function getSchema(string $name): array
     {
-        $url = $this->config->getUrl() . '/collections/' . $name;
-        $response = $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
-        return $response['fields'];
+        throw new HttpClientError(403, 'Not implemented');
     }
 
     /**
@@ -198,9 +163,6 @@ class TypesenseService implements SearchService
      */
     public function getCollection(string $name): array
     {
-        $url = $this->config->getUrl() . '/collections/' . $name;
-        return $this->httpClient->get($url, [
-            'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
-        ]);
+        throw new HttpClientError(403, 'Not implemented');
     }
 }

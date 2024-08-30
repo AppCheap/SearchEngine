@@ -2,12 +2,16 @@
 
 namespace Appcheap\SearchEngine\Service\Engine;
 
+use Appcheap\SearchEngine\App\Config\MeilisearchConfig;
 use Appcheap\SearchEngine\Service\Engine\Models\Schema;
 use Appcheap\SearchEngine\Service\Engine\Models\SearchQuery;
-use Appcheap\SearchEngine\Service\Engine\SearchServiceInterface;
+use Appcheap\SearchEngine\Service\Engine\SearchService;
 use Appcheap\SearchEngine\App\Http\HttpClientInterface;
 
-class MeilisearchService implements SearchServiceInterface
+/**
+ * The Meilisearch search service.
+ */
+class MeilisearchService implements SearchService
 {
     /**
      * @var HttpClientInterface The HTTP client to use for requests.
@@ -33,16 +37,14 @@ class MeilisearchService implements SearchServiceInterface
      * MeilisearchService constructor.
      *
      * @param HttpClientInterface $httpClient The HTTP client to use for requests.
-     * @param string              $indexName  The name of the index.
-     * @param string              $baseUrl    The Meilisearch base URL.
-     * @param string              $apiKey     The Meilisearch API key.
+     * @param MeilisearchConfig   $config     The Meilisearch configuration.
      */
-    public function __construct(HttpClientInterface $httpClient, string $indexName, string $baseUrl, string $apiKey)
+    public function __construct(HttpClientInterface $httpClient, MeilisearchConfig $config)
     {
         $this->httpClient = $httpClient;
-        $this->indexName = $indexName;
-        $this->baseUrl = $baseUrl;
-        $this->apiKey = $apiKey;
+        $this->indexName = $config->getIndexName();
+        $this->baseUrl = $config->getHost();
+        $this->apiKey = $config->getApiKey();
     }
 
     /**
