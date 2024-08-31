@@ -30,7 +30,17 @@ class WpHttpClient implements HttpClientInterface
             'timeout' => 30,
         ], $options);
 
-        return wp_remote_request($url, $args);
+        $response = wp_remote_request($url, $args);
+
+        if (is_wp_error($response)) {
+            $code = $response->get_error_code();
+            if (is_string($code)) {
+                $code = 403;
+            }
+            throw new HttpClientError((int)$code, $response->get_error_message());
+        }
+
+        return $response;
     }
 
     /**

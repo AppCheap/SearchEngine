@@ -7,13 +7,13 @@ use Brain\Monkey\Functions;
 
 class WpHttpClientTest extends TestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         Monkey\setUp();
     }
 
-    protected function tearDown(): void
+    protected function tearDown()
     {
         Monkey\tearDown();
         parent::tearDown();

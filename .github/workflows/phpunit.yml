@@ -12,6 +12,10 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2', '8.3']
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -19,7 +23,7 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.3.7' # Specify the PHP version you need
+        php-version: ${{ matrix.php-version }}
         extensions: mbstring, intl, dom
         ini-values: post_max_size=256M, upload_max_filesize=256M
         coverage: none

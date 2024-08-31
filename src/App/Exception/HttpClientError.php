@@ -34,7 +34,7 @@ class HttpClientError extends Exception
      *
      * @return int The HTTP status code.
      */
-    public function getStatusCode(): int
+    public function getStatusCode()
     {
         return $this->statusCode;
     }
@@ -44,7 +44,7 @@ class HttpClientError extends Exception
      *
      * @return string The error message.
      */
-    public function getErrorMessage(): string
+    public function getErrorMessage()
     {
         return $this->errorMessage;
     }

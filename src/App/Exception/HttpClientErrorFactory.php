@@ -12,11 +12,11 @@ class HttpClientErrorFactory
     /**
      * Create an HTTP client error exception based on the HTTP status code.
      *
-     * @param int $statusCode The HTTP status code.
-     * @param string|null $message The exception message.
+     * @param integer     $statusCode The HTTP status code.
+     * @param string|null $message    The exception message.
      * @return HttpClientError
      */
-    public static function createException(int $statusCode, string $message = null): HttpClientError
+    public static function createException(int $statusCode, string $message = null)
     {
         switch ($statusCode) {
             case 400:

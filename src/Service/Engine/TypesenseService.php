@@ -40,7 +40,7 @@ class TypesenseService implements SearchService
      * @return array The response from the server.
      * @throws HttpClientError If there is an HTTP error.
      */
-    public function createCollection(Schema $schema): array
+    public function createCollection(Schema $schema)
     {
         $url = $this->config->getUrl() . '/collections';
         return $this->httpClient->post($url, $schema->toTypesenseSchema(), [
@@ -55,7 +55,7 @@ class TypesenseService implements SearchService
      * @param array  $document The document to index.
      * @return array The response from the server.
      */
-    public function indexDocument(string $name, array $document): array
+    public function indexDocument(string $name, array $document)
     {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents?action=upsert';
         $response = $this->httpClient->post($url, $document, [
@@ -65,13 +65,16 @@ class TypesenseService implements SearchService
     }
 
     /**
-     * Bulk index documents in Typesense.
+     * Bulk index documents in the search service.
      *
-     * @param string $name      The name of the collection.
-     * @param array  $documents The documents to index.
-     * @return mixed The response from the server.
+     * @param string $name                        The name of the collection to index the documents in.
+     * @param array  $documents                   The documents to be indexed.
+     * @param string $collection_created_response The collection created response.
+     *
+     * @return array The response from the server.
+     * @throws HttpClientError If there is an HTTP error.
      */
-    public function bulkIndexDocuments(string $name, array $documents)
+    public function bulkIndexDocuments(string $name, array $documents, ?string $collection_created_response)
     {
 
         $data = '';
@@ -93,7 +96,7 @@ class TypesenseService implements SearchService
      * @param SearchQuery $query The search query.
      * @return array The search results.
      */
-    public function search(string $name, SearchQuery $query): array
+    public function search(string $name, SearchQuery $query)
     {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/search';
         $queryString = http_build_query($query->toArray());
@@ -111,7 +114,7 @@ class TypesenseService implements SearchService
      * @param string $collectionName The name of the collection.
      * @param string $documentId     The ID of the document to delete.
      */
-    public function deleteDocument(string $name, string $documentId): void
+    public function deleteDocument(string $name, string $documentId)
     {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         $this->httpClient->delete($url, [
@@ -124,7 +127,7 @@ class TypesenseService implements SearchService
      *
      * @param string $name The name of the collection to delete.
      */
-    public function deleteCollection(string $name): void
+    public function deleteCollection(string $name)
     {
         $url = $this->config->getUrl() . '/collections/' . $name;
         $this->httpClient->delete($url, [
@@ -138,7 +141,7 @@ class TypesenseService implements SearchService
      * @param string $documentId The ID of the document to retrieve.
      * @return array The retrieved document.
      */
-    public function getDocument(string $name, string $documentId): array
+    public function getDocument(string $name, string $documentId)
     {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         return $this->httpClient->get($url, [
@@ -153,7 +156,7 @@ class TypesenseService implements SearchService
      * @param string $documentId The ID of the document to update.
      * @param array  $document   The updated document.
      */
-    public function updateDocument(string $name, string $documentId, array $document): void
+    public function updateDocument(string $name, string $documentId, array $document)
     {
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/' . $documentId;
         $this->httpClient->put($url, $document, [
@@ -167,7 +170,7 @@ class TypesenseService implements SearchService
      * @param string $name   The name of the collection.
      * @param Schema $schema The updated schema.
      */
-    public function updateSchema(string $name, Schema $schema): void
+    public function updateSchema(string $name, Schema $schema)
     {
         $url = $this->config->getUrl() . '/collections/' . $name;
         $this->httpClient->put($url, $schema->toTypesenseSchema($name), [
@@ -181,7 +184,7 @@ class TypesenseService implements SearchService
      * @param string $name The name of the collection.
      * @return array The schema of the collection.
      */
-    public function getSchema(string $name): array
+    public function getSchema(string $name)
     {
         $url = $this->config->getUrl() . '/collections/' . $name;
         $response = $this->httpClient->get($url, [
@@ -191,12 +194,15 @@ class TypesenseService implements SearchService
     }
 
     /**
-     * Get a collection from Typesense.
+     * Get a collection with the given name from the search service.
      *
-     * @param string $name The name of the collection.
+     * @param string $name             The name of the collection.
+     * @param string $preview_response The preview response.
+     *
      * @return array The collection.
+     * @throws HttpClientError If there is an HTTP error.
      */
-    public function getCollection(string $name): array
+    public function getCollection(string $name, ?string $preview_response)
     {
         $url = $this->config->getUrl() . '/collections/' . $name;
         return $this->httpClient->get($url, [

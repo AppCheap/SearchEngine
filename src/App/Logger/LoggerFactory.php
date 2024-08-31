@@ -16,7 +16,7 @@ class LoggerFactory
      * @return LoggerInterface
      * @throws Exception If the logger type is not supported.
      */
-    public static function createLogger(array $config): LoggerInterface
+    public static function createLogger(array $config)
     {
         if (!isset($config['type'])) {
             throw new Exception('Logger type is not specified in the configuration.');

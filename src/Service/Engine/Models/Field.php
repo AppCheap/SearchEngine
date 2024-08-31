@@ -121,7 +121,7 @@ class Field
      * @param array $field The array of field attributes.
      * @return self The newly created Field instance.
      */
-    public static function create(array $field): self
+    public static function create(array $field)
     {
 
         self::validate($field);
@@ -140,7 +140,7 @@ class Field
      * @return void Nothing.
      * @throws \Exception If the input is invalid.
      */
-    public static function validate(array $fields): void
+    public static function validate(array $fields)
     {
         $valid_fields = [
             'name' => 'string|required',
@@ -206,7 +206,7 @@ class Field
      *
      * @return array The array representation of the Field instance.
      */
-    public function toArray(): array
+    public function toArray()
     {
         $array = [
             'name' => $this->name,
@@ -270,7 +270,7 @@ class Field
      *
      * @return array The array of all fields.
      */
-    public static function getAllFields(): array
+    public static function getAllFields()
     {
         return [
             'name' => [

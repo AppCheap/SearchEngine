@@ -41,7 +41,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function createCollection(string $name, Schema $schema): array
+    public function createCollection(string $name, Schema $schema)
     {
         $url = $this->baseUrl . '/' . $name;
         return $this->httpClient->put($url, $schema->toElasticsearchSchema(), [
@@ -52,7 +52,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function indexDocument(string $name, array $document): array;
+    public function indexDocument(string $name, array $document)
     {
         $url = $this->baseUrl . '/_doc';
         $response = $this->httpClient->post($url, $document, [
@@ -80,7 +80,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function search(string $name, SearchQuery $query): array
+    public function search(string $name, SearchQuery $query)
     {
         $url = $this->baseUrl . '/_search';
         $response = $this->httpClient->post($url, $query->toArray(), [
@@ -92,7 +92,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function deleteDocument(string $name, string $objectId): void
+    public function deleteDocument(string $name, string $objectId)
     {
         $url = $this->baseUrl . '/_doc/' . $objectId;
         $this->httpClient->delete($url, [
@@ -103,7 +103,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function deleteCollection(string $name): void
+    public function deleteCollection(string $name)
     {
         $url = $this->baseUrl . '/' . $name;
         $this->httpClient->delete($url, [
@@ -114,7 +114,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function getDocument(string $name, string $objectId): array
+    public function getDocument(string $name, string $objectId)
     {
         $url = $this->baseUrl . '/_doc/' . $objectId;
         return $this->httpClient->get($url, [
@@ -125,7 +125,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function updateDocument(string $name, string $objectId, array $document): void
+    public function updateDocument(string $name, string $objectId, array $document)
     {
         $url = $this->baseUrl . '/_doc/' . $objectId;
         $this->httpClient->put($url, $document, [
@@ -136,7 +136,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function updateSchema(string $name, Schema $schema): void
+    public function updateSchema(string $name, Schema $schema)
     {
         $url = $this->baseUrl . '/' . $name;
         $this->httpClient->put($url, $schema->toElasticsearchSchema(), [
@@ -147,7 +147,7 @@ class ElasticsearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function getSchema(string $name): array
+    public function getSchema(string $name)
     {
         $url = $this->baseUrl . '/' . $name;
         $response = $this->httpClient->get($url, [
@@ -157,9 +157,15 @@ class ElasticsearchService implements SearchService
     }
 
     /**
-     * {@inheritdoc}
+     * Get a collection with the given name from the search service.
+     *
+     * @param string $name             The name of the collection.
+     * @param string $preview_response The preview response.
+     *
+     * @return array The collection.
+     * @throws HttpClientError If there is an HTTP error.
      */
-    public function getCollection(string $name): array
+    public function getCollection(string $name, ?string $preview_response)
     {
         $url = $this->baseUrl . '/' . $name;
         return $this->httpClient->get($url, [

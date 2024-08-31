@@ -16,12 +16,12 @@ class SearchQuery
     }
 
     // Getters
-    public function getQ(): string
+    public function getQ()
     {
         return $this->q;
     }
 
-    public function getQueryBy(): string
+    public function getQueryBy()
     {
         return $this->query_by;
     }
@@ -32,7 +32,7 @@ class SearchQuery
 
     // ... setters for other parameters
 
-    public function toArray(): array
+    public function toArray()
     {
         $params = [
         'q' => $this->q,

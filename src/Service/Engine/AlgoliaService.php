@@ -49,7 +49,7 @@ class AlgoliaService implements SearchService
      *
      * @return array The headers for the request.
      */
-    private function getHeaders(): array
+    private function getHeaders()
     {
         return [
             'X-Algolia-API-Key: ' . $this->apiKey,
@@ -60,7 +60,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function createCollection(string $name, Schema $schema): void
+    public function createCollection(string $name, Schema $schema)
     {
         // Send a POST request to the Algolia API to create a new index.
         $this->httpClient->post(sprintf("%s/indexes", $this->baseUrl), [
@@ -72,7 +72,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function indexDocument(string $name, array $document): array
+    public function indexDocument(string $name, array $document)
     {
         // Send a POST request to the Algolia API to index a document.
         $response = $this->httpClient->post(sprintf("%s/indexes/documents", $this->baseUrl), $document, $this->getHeaders());
@@ -91,7 +91,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function search(string $name, SearchQuery $query): array
+    public function search(string $name, SearchQuery $query)
     {
         // Send a POST request to the Algolia API to search for documents.
         return $this->httpClient->post(sprintf("%s/indexes/documents/search", $this->baseUrl), $query->toArray(), $this->getHeaders());
@@ -100,7 +100,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function deleteDocument(string $name, string $id): void
+    public function deleteDocument(string $name, string $id)
     {
         // Send a DELETE request to the Algolia API to delete a document.
         $this->httpClient->delete(sprintf("%s/indexes/documents/%s", $this->baseUrl, $id), [], $this->getHeaders());
@@ -109,7 +109,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function deleteCollection(string $name): void
+    public function deleteCollection(string $name)
     {
         // Send a DELETE request to the Algolia API to delete an index.
         $this->httpClient->delete(sprintf("%s/indexes/%s", $this->baseUrl, $name), [], $this->getHeaders());
@@ -118,7 +118,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function getDocument(string $name, string $id): array
+    public function getDocument(string $name, string $id)
     {
         // Send a GET request to the Algolia API to get a document.
         return $this->httpClient->get(sprintf("%s/indexes/documents/%s", $this->baseUrl, $id), $this->getHeaders());
@@ -127,7 +127,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function updateDocument(string $name, string $id, array $document): void
+    public function updateDocument(string $name, string $id, array $document)
     {
         // Send a PUT request to the Algolia API to update a document.
         $this->httpClient->put(sprintf("%s/indexes/documents/%s", $this->baseUrl, $id), $document, $this->getHeaders());
@@ -136,7 +136,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function updateSchema(string $name, Schema $schema): void
+    public function updateSchema(string $name, Schema $schema)
     {
         // Send a PUT request to the Algolia API to update an index.
         $this->httpClient->put(sprintf("%s/indexes/%s", $this->baseUrl, $name), [
@@ -147,7 +147,7 @@ class AlgoliaService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function getSchema(string $name): array
+    public function getSchema(string $name)
     {
         // Send a GET request to the Algolia API to get the schema of an index.
         $response = $this->httpClient->get(sprintf("%s/indexes/%s", $this->baseUrl, $name), $this->getHeaders());
@@ -155,9 +155,15 @@ class AlgoliaService implements SearchService
     }
 
     /**
-     * {@inheritdoc}
+     * Get a collection with the given name from the search service.
+     *
+     * @param string $name             The name of the collection.
+     * @param string $preview_response The preview response.
+     *
+     * @return array The collection.
+     * @throws HttpClientError If there is an HTTP error.
      */
-    public function getCollection(string $name): array
+    public function getCollection(string $name, ?string $preview_response)
     {
         // Send a GET request to the Algolia API to get an index.
         return $this->httpClient->get(sprintf("%s/indexes/%s", $this->baseUrl, $name), $this->getHeaders());

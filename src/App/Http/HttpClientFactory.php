@@ -4,7 +4,7 @@ namespace Appcheap\SearchEngine\App\Http;
 
 class HttpClientFactory
 {
-    public static function createHttpClient(string $type, array $config = []): HttpClientInterface
+    public static function createHttpClient(string $type, array $config = [])
     {
         switch ($type) {
             case 'guzzle':

@@ -39,7 +39,7 @@ class Schema
      * @param string $defaultSortingField The default sorting field
      * @return Schema The schema object
      */
-    public function setDefaultSortingField(string $defaultSortingField): Schema
+    public function setDefaultSortingField(string $defaultSortingField)
     {
         $this->defaultSortingField = $defaultSortingField;
         return $this;
@@ -50,7 +50,7 @@ class Schema
      *
      * @return string The name of the collection
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -60,7 +60,7 @@ class Schema
      *
      * @return Field[] The fields of the schema
      */
-    public function getFields(): array
+    public function getFields()
     {
         return $this->fields;
     }
@@ -70,7 +70,7 @@ class Schema
      *
      * @return array The schema fields in Algolia's format
      */
-    public function toAlgoliaSchema(): array
+    public function toAlgoliaSchema()
     {
         // Convert schema fields to Algolia's format if needed
         $algoliaFields = [];
@@ -100,7 +100,7 @@ class Schema
      *
      * @return array The schema fields in Typesense's format
      */
-    public function toTypesenseSchema(): array
+    public function toTypesenseSchema()
     {
         $schema = [
             'name' => $this->name,
@@ -125,7 +125,7 @@ class Schema
      *
      * @return array The schema fields in Elasticsearch's format
      */
-    public function toElasticsearchSchema(): array
+    public function toElasticsearchSchema()
     {
         // Convert schema fields to Elasticsearch's format
         $elasticsearchFields = [];
@@ -152,7 +152,7 @@ class Schema
      *
      * @return array The schema fields in MeiliSearch's format
      */
-    public function toMeiliSearchSchema(): array
+    public function toMeiliSearchSchema()
     {
         // Convert schema fields to MeiliSearch's format
         $meilisearchFields = [];

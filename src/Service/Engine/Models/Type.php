@@ -27,7 +27,7 @@ class Type
      *
      * @return array An array of all supported types.
      */
-    public static function getAllTypes(): array
+    public static function getAllTypes()
     {
         return [
             self::STRING,

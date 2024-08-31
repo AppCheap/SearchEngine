@@ -4,17 +4,21 @@ use PHPUnit\Framework\TestCase;
 use Appcheap\SearchEngine\App\Container;
 use Appcheap\SearchEngine\App\Proxy\MemoryProxy;
 
-class AtHome {
-    public function doSomething() {
+class AtHome
+{
+    public function doSomething()
+    {
         return "If I hear that word again...";
     }
 }
 
-class ContainerTest extends TestCase {
-    public function testCanRegisterAndResolveService() {
+class ContainerTest extends TestCase
+{
+    public function testCanRegisterAndResolveService()
+    {
         $container = new Container();
 
-        $container->set(AtHome::class, function() {
+        $container->set(AtHome::class, function () {
             return new AtHome();
         });
 
@@ -31,10 +35,11 @@ class ContainerTest extends TestCase {
         $this->assertInstanceOf(AtHome::class, $resolved->getInstance());
     }
 
-    public function testCanRegisterAndResolveServiceWithClosure() {
+    public function testCanRegisterAndResolveServiceWithClosure()
+    {
         $container = new Container();
 
-        $container->set('bar', function() use ($container) {
+        $container->set('bar', function () use ($container) {
             return new \DateTime();
         });
 
@@ -43,10 +48,11 @@ class ContainerTest extends TestCase {
         $this->assertInstanceOf(\DateTime::class, $resolved->getInstance());
     }
 
-    public function testSingletonResolution() {
+    public function testSingletonResolution()
+    {
         $container = new Container();
 
-        $container->set('baz', function() use ($container) {
+        $container->set('baz', function () use ($container) {
             return new \stdClass();
         });
 
@@ -56,7 +62,8 @@ class ContainerTest extends TestCase {
         $this->assertSame($firstInstance, $secondInstance);
     }
 
-    public function testThrowsExceptionWhenServiceNotFound() {
+    public function testThrowsExceptionWhenServiceNotFound()
+    {
         $container = new Container();
 
         $this->expectException(\Exception::class);
@@ -65,7 +72,8 @@ class ContainerTest extends TestCase {
         $container->get('non_existent_service');
     }
 
-    public function testHasMethod() {
+    public function testHasMethod()
+    {
         $container = new Container();
 
         $container->set('bar', \stdClass::class);
@@ -74,7 +82,8 @@ class ContainerTest extends TestCase {
         $this->assertFalse($container->has('non_bar'));
     }
 
-    public function testCanRegisterAndResolveServiceWithString() {
+    public function testCanRegisterAndResolveServiceWithString()
+    {
         $container = new Container();
 
         $container->set('baz', 'qux');

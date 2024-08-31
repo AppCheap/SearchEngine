@@ -53,7 +53,7 @@ class MeilisearchService implements SearchService
      * @param string $name   The name of the index.
      * @param Schema $schema The schema of the index.
      */
-    public function createCollection(string $name, Schema $schema): void
+    public function createCollection(string $name, Schema $schema)
     {
         $url = $this->baseUrl . '/indexes';
         $this->httpClient->post($url, ['uid' => $name, 'schema' => $schema->toMeilisearchSchema()], [
@@ -64,7 +64,7 @@ class MeilisearchService implements SearchService
     /**
      * {@inheritdoc}
      */
-    public function indexDocument(string $name, array $document): array;
+    public function indexDocument(string $name, array $document)
     {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents';
         $response = $this->httpClient->post($url, $document, [
@@ -92,7 +92,7 @@ class MeilisearchService implements SearchService
      * @param SearchQuery $query The search query.
      * @return array The search results.
      */
-    public function search(string $name, SearchQuery $query): array
+    public function search(string $name, SearchQuery $query)
     {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/search';
         $response = $this->httpClient->post($url, $query->toArray(), [
@@ -106,7 +106,7 @@ class MeilisearchService implements SearchService
      *
      * @param string $documentId The ID of the document to delete.
      */
-    public function deleteDocument(string $name, string $documentId): void
+    public function deleteDocument(string $name, string $documentId)
     {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents/' . $documentId;
         $this->httpClient->delete($url, [
@@ -119,7 +119,7 @@ class MeilisearchService implements SearchService
      *
      * @param string $name The name of the index to delete.
      */
-    public function deleteCollection(string $name): void
+    public function deleteCollection(string $name)
     {
         $url = $this->baseUrl . '/indexes/' . $name;
         $this->httpClient->delete($url, [
@@ -133,7 +133,7 @@ class MeilisearchService implements SearchService
      * @param string $documentId The ID of the document to retrieve.
      * @return array The retrieved document.
      */
-    public function getDocument(string $name, string $documentId): array
+    public function getDocument(string $name, string $documentId)
     {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents/' . $documentId;
         return $this->httpClient->get($url, [
@@ -147,7 +147,7 @@ class MeilisearchService implements SearchService
      * @param string $documentId The ID of the document to update.
      * @param array  $document   The updated document.
      */
-    public function updateDocument(string $name, string $documentId, array $document): void
+    public function updateDocument(string $name, string $documentId, array $document)
     {
         $url = $this->baseUrl . '/indexes/' . $this->indexName . '/documents/' . $documentId;
         $this->httpClient->put($url, $document, [
@@ -161,7 +161,7 @@ class MeilisearchService implements SearchService
      * @param string $name   The name of the index to update.
      * @param Schema $schema The updated schema.
      */
-    public function updateSchema(string $name, Schema $schema): void
+    public function updateSchema(string $name, Schema $schema)
     {
         $url = $this->baseUrl . '/indexes/' . $name;
         $this->httpClient->put($url, ['schema' => $schema->toMeilisearchSchema()], [
@@ -175,7 +175,7 @@ class MeilisearchService implements SearchService
      * @param string $name The name of the index.
      * @return array The schema of the index.
      */
-    public function getSchema(string $name): array
+    public function getSchema(string $name)
     {
         $url = $this->baseUrl . '/indexes/' . $name;
         $response = $this->httpClient->get($url, [
@@ -185,12 +185,15 @@ class MeilisearchService implements SearchService
     }
 
     /**
-     * Get an index from Meilisearch.
+     * Get a collection with the given name from the search service.
      *
-     * @param string $name The name of the index.
-     * @return array The index.
+     * @param string $name             The name of the collection.
+     * @param string $preview_response The preview response.
+     *
+     * @return array The collection.
+     * @throws HttpClientError If there is an HTTP error.
      */
-    public function getCollection(string $name): array
+    public function getCollection(string $name, ?string $preview_response)
     {
         $url = $this->baseUrl . '/indexes/' . $name;
         return $this->httpClient->get($url, [

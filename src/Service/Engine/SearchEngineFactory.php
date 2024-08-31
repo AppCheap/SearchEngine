@@ -39,6 +39,8 @@ class SearchEngineFactory
                 return new AlgoliaService($http, $config);
             case 'meilisearch':
                 return new MeilisearchService($http, $config);
+            case 'openai':
+                return new OpenAiService($http, $config);
             default:
                 throw new Exception("Unsupported service type: $serviceType");
         }
