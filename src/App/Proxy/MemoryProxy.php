@@ -43,7 +43,22 @@ class MemoryProxy
      *
      * @return mixed The actual instance.
      */
-    public function getInstance(mixed ...$params)
+    public function getInstance(...$params)
+    {
+        if ($this->instance === null) {
+            $this->instance = ($this->initializer)(...$params);
+        }
+        return $this->instance;
+    }
+    
+    /**
+     * Get the actual instance.
+     *
+     * @param mixed ...$params The parameters to pass to the initializer function.
+     *
+     * @return mixed The actual instance.
+     */
+    public function instance(...$params)
     {
         if ($this->instance === null) {
             $this->instance = ($this->initializer)(...$params);

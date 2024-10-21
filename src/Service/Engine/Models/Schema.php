@@ -175,4 +175,26 @@ class Schema
         }
         return $meilisearchFields;
     }
+
+    /**
+     * Convert the schema fields to the specified service's format.
+     *
+     * @param string $serviceType The service type
+     * @return array The schema fields in the specified service's format
+     */
+    public function toArray($serviceType)
+    {
+        switch ($serviceType) {
+            case 'elasticsearch':
+                return $this->toElasticsearchSchema();
+            case 'typesense':
+                return $this->toTypesenseSchema();
+            case 'algolia':
+                return $this->toAlgoliaSchema();
+            case 'meilisearch':
+                return $this->toMeiliSearchSchema();
+            default:
+                return [];
+        }
+    }
 }

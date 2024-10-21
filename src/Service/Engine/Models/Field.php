@@ -106,7 +106,7 @@ class Field
      * @return void Nothing.
      * @throws \Exception If the property does not exist.
      */
-    public function __set(string $name, mixed $value)
+    public function __set(string $name, $value)
     {
         if (property_exists($this, $name)) {
             $this->$name = $value;

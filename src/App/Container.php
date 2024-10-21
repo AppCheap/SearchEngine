@@ -22,6 +22,11 @@ class Container
     private $instances = [];
 
     /**
+     * @var array The array of factory bindings.
+     */
+    private $factories = [];
+
+    /**
      * Set a binding in the container.
      *
      * @param string $abstract The abstract key.
@@ -31,6 +36,18 @@ class Container
     public function set($abstract, $concrete)
     {
         $this->bindings[$abstract] = $concrete;
+    }
+
+    /**
+     * Register a factory in the container.
+     *
+     * @param string $abstract The abstract key.
+     * @param callable $factory The factory callable.
+     * @return void
+     */
+    public function factory($abstract, callable $factory)
+    {
+        $this->factories[$abstract] = $factory;
     }
 
     /**
@@ -45,6 +62,11 @@ class Container
         // Return already resolved instance if available
         if (isset($this->instances[$abstract])) {
             return $this->instances[$abstract];
+        }
+
+        // Check if a factory is registered
+        if (isset($this->factories[$abstract])) {
+            return $this->factories[$abstract](); // Always create a new instance
         }
 
         // Check if binding exists

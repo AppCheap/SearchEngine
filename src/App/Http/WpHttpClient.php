@@ -54,7 +54,7 @@ class WpHttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function post(string $url, mixed $data, array $headers = [])
+    public function post(string $url, array $data, array $headers = [])
     {
         return $this->sendRequest('POST', $url, [
             'headers' => $headers,
