@@ -30,7 +30,7 @@ class Container
      * Set a binding in the container.
      *
      * @param string $abstract The abstract key.
-     * @param mixed $concrete The concrete value.
+     * @param mixed  $concrete The concrete value.
      * @return void
      */
     public function set($abstract, $concrete)
@@ -41,11 +41,12 @@ class Container
     /**
      * Register a factory in the container.
      *
-     * @param string $abstract The abstract key.
-     * @param callable $factory The factory callable.
+     * @param string          $abstract The abstract key.
+     * @param callable|string $factory  The factory callable or string.
+     *
      * @return void
      */
-    public function factory($abstract, callable $factory)
+    public function factory(string $abstract, $factory)
     {
         $this->factories[$abstract] = $factory;
     }
@@ -66,7 +67,17 @@ class Container
 
         // Check if a factory is registered
         if (isset($this->factories[$abstract])) {
-            return $this->factories[$abstract](); // Always create a new instance
+            // Check if the factory is a callable
+            if (is_callable($this->factories[$abstract])) {
+                return $this->instances[$abstract] = $this->factories[$abstract]();
+            }
+
+            // Check if the factory is a class name
+            if (class_exists($this->factories[$abstract])) {
+                return $this->instances[$abstract] = new $this->factories[$abstract]();
+            }
+
+            throw new \Exception("Invalid factory for $abstract");
         }
 
         // Check if binding exists
@@ -90,7 +101,7 @@ class Container
      * Checks if the container has a binding for the given identifier.
      *
      * @param string $id The identifier to check.
-     * @return bool Returns true if the container has a binding for the identifier, false otherwise.
+     * @return boolean Returns true if the container has a binding for the identifier, false otherwise.
      */
     public function has(string $id)
     {
