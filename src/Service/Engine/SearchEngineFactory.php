@@ -17,30 +17,40 @@ use Exception;
  */
 class SearchEngineFactory
 {
+    private HttpClientInterface $http;
+
+    /**
+     * Constructor
+     *
+     * @param HttpClientInterface $http The HTTP client to use for requests.
+     */
+    public function __construct(HttpClientInterface $http)
+    {
+        $this->http = $http;
+    }
+
     /**
      * Create a search engine service instance based on the provided configuration.
      *
-     * @param string              $serviceType The type of search engine service.
-     * @param HttpClientInterface $http        The HTTP client to use for requests.
-     * @param array               $config      The configuration array.
+     * @param string $serviceType The type of search engine service.
+     * @param mixed  $config      The configuration array.
      *
      * @return mixed
      * @throws Exception If the search engine service type is not supported.
      */
-    public static function createService(string $serviceType, HttpClientInterface $http, array $config)
+    public function create(string $serviceType, mixed $config)
     {
-        $config = SearchConfigFactory::create($serviceType, $config);
         switch ($serviceType) {
             case 'elasticsearch':
-                return new ElasticsearchService($http, $config);
+                return new ElasticsearchService($this->http, $config);
             case 'typesense':
-                return new TypesenseService($http, $config);
+                return new TypesenseService($this->http, $config);
             case 'algolia':
-                return new AlgoliaService($http, $config);
+                return new AlgoliaService($this->http, $config);
             case 'meilisearch':
-                return new MeilisearchService($http, $config);
+                return new MeilisearchService($this->http, $config);
             case 'openai':
-                return new OpenAiService($http, $config);
+                return new OpenAiService($this->http, $config);
             default:
                 throw new Exception("Unsupported service type: $serviceType");
         }

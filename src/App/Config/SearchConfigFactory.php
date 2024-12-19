@@ -2,6 +2,8 @@
 
 namespace Appcheap\SearchEngine\App\Config;
 
+use Exception;
+
 /**
  * Factory class to create search config objects
  */
@@ -13,9 +15,9 @@ class SearchConfigFactory
      * @param string $serviceType The type of search service.
      * @param array  $config      The configuration array.
      * @return mixed The search config object.
-     * @throws \Exception If the service type is not supported.
+     * @throws Exception If the service type is not supported.
      */
-    public static function create(string $serviceType, array $config)
+    public function create(string $serviceType, array $config)
     {
         switch ($serviceType) {
             case 'typesense':
@@ -29,7 +31,7 @@ class SearchConfigFactory
             case 'openai':
                 return new OpenaiConfig($config['apiKey']);
             default:
-                throw new \Exception("Unsupported service type: $serviceType");
+                throw new Exception("Unsupported service type: $serviceType");
         }
     }
 }
