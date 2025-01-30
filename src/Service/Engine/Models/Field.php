@@ -30,7 +30,7 @@ class Field
     /**
      * @var bool When set to true, the field can have empty, null or missing values.
      */
-    private $optional = true;
+    private $optional = false;
 
     /**
      * @var bool When set to false, the field will not be indexed in any in-memory index.
@@ -218,7 +218,7 @@ class Field
             $array['facet'] = $this->facet;
         }
 
-        if ($this->optional !== true) {
+        if ($this->optional !== false) {
             $array['optional'] = $this->optional;
         }
 

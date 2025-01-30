@@ -82,6 +82,8 @@ class TypesenseService implements SearchService
             $data .= json_encode($document) . "\n";
         }
 
+        error_log('bulkIndexDocuments' . $data);
+
         $url = $this->config->getUrl() . '/collections/' . $name . '/documents/import?action=upsert';
         return $this->httpClient->post($url, $data, [
             'X-TYPESENSE-API-KEY' => $this->config->getApiKey(),
